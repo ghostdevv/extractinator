@@ -6,7 +6,7 @@ import './types.d'
 
 const cli = sade('extractinator')
 
-cli.version(typeof __VERSION__ == 'undefined' ? 'dev' : __VERSION__)
+cli.version(__VERSION__)
 
 interface ExtractOtpions {
 	tsconfig: string

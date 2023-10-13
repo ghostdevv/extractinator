@@ -1,4 +1,5 @@
 import type { SlotBit, Bit, ParsedSvelteFile } from './types'
+
 import { Project, SourceFile, Node } from 'ts-morph'
 import { parseCommentFromNode } from './comments'
 import { writeFile } from 'node:fs/promises'
@@ -113,7 +114,7 @@ function getType(node: Node) {
 		node
 			.getType()
 			.getText()
-			//? Remove all import("...")
+			//? Remove all `import("...")`
 			.replace(/import\((?:"|')[^]+?(?:"|')\)\./g, '')
 	)
 }

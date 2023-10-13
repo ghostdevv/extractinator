@@ -1,3 +1,7 @@
+declare namespace global {
+	const __VERSION__: string;
+}
+
 export interface ParsedSvelteFile {
 	componentName: string
 

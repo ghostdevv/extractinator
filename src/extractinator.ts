@@ -1,10 +1,11 @@
 import type { SlotBit, Bit, ParsedSvelteFile } from './types'
 import type { TSDocParser } from '@microsoft/tsdoc'
 
+import { createTSDocParser, parseCommentFromNode } from './comments'
+import { getName, getType, isExported } from './utils/nodes'
 import { Project, SourceFile, Node } from 'ts-morph'
 import { mkdir, rm, writeFile } from 'fs/promises'
-import { createTSDocParser, parseCommentFromNode } from './comments'
-import { l, b, n, o, g, dim } from './log'
+import { l, b, n, o, g, dim } from './utils/log'
 import { emit } from './emit'
 import ts from 'typescript'
 
@@ -131,26 +132,6 @@ function extractSvelteTypeNodes(file: SourceFile) {
 }
 
 /**
- * Attempts to get the node name
- */
-function getName(node: Node) {
-	return node.getSymbol()?.getName() || null
-}
-
-/**
- * Attempts to get the node type
- */
-function getType(node: Node) {
-	return (
-		node
-			.getType()
-			.getText()
-			//? Remove all `import("...")`
-			.replace(/import\((?:"|')[^]+?(?:"|')\)\./g, '')
-	)
-}
-
-/**
  * Convert the node into a {@link Bit}
  */
 function toBit(node: Node, parser: TSDocParser): Bit {
@@ -232,12 +213,6 @@ function extractModuleExports(componentName: string, file: SourceFile, parser: T
 				}
 			})
 	)
-}
-
-function isExported(node: Node) {
-	return !!node
-		.getFirstChildByKind(ts.SyntaxKind.SyntaxList)
-		?.getFirstChildByKind(ts.SyntaxKind.ExportKeyword)
 }
 
 function parseFile(file: SourceFile, parser: TSDocParser): ParsedSvelteFile {

@@ -1,8 +1,8 @@
+import { extractinator } from './extractinator'
 import { resolve } from 'node:path'
-import { l } from './log'
+import { l } from './utils/log'
 import sade from 'sade'
 import './types.d'
-import { extractinator } from '.'
 
 const cli = sade('extractinator')
 

@@ -4,7 +4,7 @@ import type { Node } from 'ts-morph'
 
 import { TSDocConfiguration, DocExcerpt, TSDocParser, TextRange } from '@microsoft/tsdoc'
 import { TSDocConfigFile } from '@microsoft/tsdoc-config'
-import { l, dim, r, y } from './log'
+import { l, dim, r, y } from './utils/log'
 import ts from 'typescript'
 
 export function createTSDocParser(tsdocConfigPath: string) {

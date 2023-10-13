@@ -73,8 +73,3 @@ export function n(
 ) {
 	for (let i = 0; i < count; i++) console.log()
 }
-
-/** JSON.Stringify */
-export function j(o: unknown) {
-	return stringify(o, 2)
-}

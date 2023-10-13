@@ -1,0 +1,20 @@
+{
+    "name": "extractinator",
+    "version": "0.1.0",
+    "description": "todo @fractalhq do this ty",
+    "contributors": [
+        "Braden Wiggins <braden@fracal-hq.com> (https://fractal-hq.com/)",
+        "Willow (GHOST) <ghostdevbusiness@gmail.com> (https://ghostdev.xyz)"
+    ],
+    "dependencies": {
+        "chalk": "^5.3.0",
+        "desm": "^1.3.0",
+        "svelte": "^4.2.1",
+        "svelte2tsx": "^0.6.23",
+        "ts-morph": "^20.0.0",
+        "typescript": "^5.2.2"
+    },
+    "devDependencies": {
+        "@types/node": "^20.8.5"
+    }
+}

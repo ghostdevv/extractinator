@@ -1,5 +1,5 @@
-declare namespace global {
-	const __VERSION__: string;
+declare global {
+	const __VERSION__: string
 }
 
 export interface ParsedSvelteFile {

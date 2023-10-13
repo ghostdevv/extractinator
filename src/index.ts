@@ -1,17 +1,48 @@
 import type { SlotBit, Bit, ParsedSvelteFile } from './types'
+import type { TSDocParser } from '@microsoft/tsdoc'
 
 import { Project, SourceFile, Node } from 'ts-morph'
-import { parseCommentFromNode } from './comments'
-import { writeFile } from 'node:fs/promises'
+import { mkdir, rm, writeFile } from 'fs/promises'
+import { createTSDocParser, parseCommentFromNode } from './comments'
 import { l, b, n, o, g, dim } from './log'
-import { OUTPUT_DIR } from './vars'
+import { emit } from './emit'
 import ts from 'typescript'
 
-//? Create ts-morph project
-const project = new Project()
+export async function extractinator(input: string, output: string, tsdocConfigPath: string) {
+	//? Create ts-morph project
+	const project = new Project()
 
-//? Load all the generated Svelte .d.ts files
-project.addSourceFilesAtPaths(`${OUTPUT_DIR}/**/*.svelte.d.ts`)
+	//? Generate the .svelte.d.ts files
+	const dts = await emit(input)
+
+	//? Load all the generated Svelte .d.ts files
+	project.addSourceFilesAtPaths(`${dts.location}/**/*.svelte.d.ts`)
+
+	//? Make sure the output directory exists
+	await mkdir(output, { recursive: true })
+
+	const tsdoc = createTSDocParser(tsdocConfigPath)
+
+	for (const sourceFile of project.getSourceFiles()) {
+		const file = parseFile(sourceFile, tsdoc)
+
+		l(o(file.componentName))
+		l(dim('Props:   '), b(file.props.length))
+		l(dim('Slots:   '), b(file.slots.length))
+		l(dim('Events:  '), b(file.events.length))
+		l(dim('Exports: '), b(file.variables.length))
+		n()
+
+		await writeFile(
+			`${output}/${file.componentName}.doc.json`,
+			JSON.stringify(file, null, 2),
+			'utf-8',
+		)
+	}
+
+	//? Cleanup
+	await rm(dts.location, { recursive: true })
+}
 
 /**
  * ? Find all the "key: value" nodes for props, events, and slots
@@ -122,15 +153,15 @@ function getType(node: Node) {
 /**
  * Convert the node into a {@link Bit}
  */
-function toBit(node: Node): Bit {
+function toBit(node: Node, parser: TSDocParser): Bit {
 	return {
-		comment: parseCommentFromNode(node),
+		comment: parseCommentFromNode(node, parser),
 		name: getName(node) || 'it broke',
 		type: getType(node),
 	}
 }
 
-function parseSlot(node: Node): SlotBit {
+function parseSlot(node: Node, parser: TSDocParser): SlotBit {
 	/**
 	 * ? Slots look like this
 	 *
@@ -155,16 +186,16 @@ function parseSlot(node: Node): SlotBit {
 		.getChildrenOfKind(ts.SyntaxKind.TypeLiteral)[0]
 		?.getChildSyntaxList()
 		?.getChildren()
-		?.map(toBit)
+		?.map((node) => toBit(node, parser))
 
 	return {
-		comment: parseCommentFromNode(node),
+		comment: parseCommentFromNode(node, parser),
 		name: getName(node) || 'it broke',
 		props: props || [],
 	}
 }
 
-function extractModuleExports(componentName: string, file: SourceFile) {
+function extractModuleExports(componentName: string, file: SourceFile, parser: TSDocParser) {
 	//? Nodes we don't care about, they are handled elsewhere
 	const ignoredNodeNames = [
 		'default',
@@ -190,14 +221,14 @@ function extractModuleExports(componentName: string, file: SourceFile) {
 						)!
 
 						return {
-							comment: parseCommentFromNode(node),
+							comment: parseCommentFromNode(node, parser),
 							name: getName(declaration) || 'it broke ahjk',
 							type: getType(declaration),
 						}
 					}
 
 					default:
-						return toBit(node)
+						return toBit(node, parser)
 				}
 			})
 	)
@@ -209,41 +240,27 @@ function isExported(node: Node) {
 		?.getFirstChildByKind(ts.SyntaxKind.ExportKeyword)
 }
 
-const parsed: ParsedSvelteFile[] = []
-
-for (const file of project.getSourceFiles()) {
+function parseFile(file: SourceFile, parser: TSDocParser): ParsedSvelteFile {
 	//? Get the component name from the file name
 	const componentName = file.getBaseName().replace('.svelte.d.ts', '')
-
-	l(o(componentName))
 
 	//? Get the props, events, slots nodes
 	const stuff = extractSvelteTypeNodes(file)
 
 	//? Parse the props, events, slots nodes to bits
-	const slots = stuff.slots?.map<SlotBit>(parseSlot) || []
-	const events = stuff.events?.map<Bit>(toBit) || []
-	const props = stuff.props?.map<Bit>(toBit) || []
+	const slots = stuff.slots?.map<SlotBit>((n) => parseSlot(n, parser)) || []
+	const events = stuff.events?.map<Bit>((n) => toBit(n, parser)) || []
+	const props = stuff.props?.map<Bit>((n) => toBit(n, parser)) || []
 
 	//? Extract the export bits
-	const variables = extractModuleExports(componentName, file)
+	const variables = extractModuleExports(componentName, file, parser)
 
-	l(dim('Props:   '), b(stuff.props?.length || 0))
-	l(dim('Slots:   '), b(stuff.slots?.length || 0))
-	l(dim('Events:  '), b(stuff.events?.length || 0))
-	l(dim('Exports: '), b(variables.length || 0))
-	n()
-
-	parsed.push({
+	return {
 		file: file.getFilePath(),
 		componentName,
 		props,
 		events,
 		slots,
 		variables,
-	})
+	}
 }
-
-writeFile(`${OUTPUT_DIR}/out.json`, JSON.stringify(parsed, null, 2), 'utf-8')
-
-l(g('done'))

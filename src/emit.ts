@@ -1,15 +1,23 @@
-import { INPUT_DIR, OUTPUT_DIR } from './vars'
 import { rm, mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { emitDts } from 'svelte2tsx'
-
-await rm(OUTPUT_DIR, { force: true, recursive: true })
-await mkdir(OUTPUT_DIR, { recursive: true })
+import { resolve } from 'node:path'
 
 const require = createRequire(import.meta.url)
 
-await emitDts({
-	svelteShimsPath: require.resolve('svelte2tsx/svelte-shims-v4.d.ts'),
-	declarationDir: OUTPUT_DIR,
-	libRoot: INPUT_DIR,
-})
+const TEMP_DIR = '.extractinator-temp'
+
+export async function emit(input: string) {
+	await rm(TEMP_DIR, { force: true, recursive: true })
+	await mkdir(TEMP_DIR, { recursive: true })
+
+	await emitDts({
+		svelteShimsPath: require.resolve('svelte2tsx/svelte-shims-v4.d.ts'),
+		declarationDir: TEMP_DIR,
+		libRoot: input,
+	})
+
+	return {
+		location: resolve(TEMP_DIR),
+	}
+}

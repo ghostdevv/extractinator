@@ -1,5 +1,29 @@
-import sade from 'sade';
+import { resolve } from 'node:path'
+import { l } from './log'
+import sade from 'sade'
+import './types.d'
+import { extractinator } from '.'
 
-const cli = sade('extractinator');
+const cli = sade('extractinator')
 
-cli.version(__VERSION__)
+cli.version(typeof __VERSION__ == 'undefined' ? 'dev' : __VERSION__)
+
+interface ExtractOtpions {
+	tsconfig: string
+	'tsdoc-config': string
+}
+
+cli.command('extract <input> <output>')
+	.describe('Extract the nator')
+	.option('--tsconfig', 'Path to a custom tsconfig.json')
+	.option('--tsdoc-config', 'Path to a custom tsdoc.json')
+	.action(async (input: string, output: string, options: ExtractOtpions) => {
+		input = resolve(input)
+		output = resolve(output)
+
+		l({ input, output, options })
+
+		await extractinator(input, output, options['tsdoc-config'])
+	})
+
+cli.parse(process.argv)

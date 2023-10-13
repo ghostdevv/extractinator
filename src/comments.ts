@@ -7,29 +7,31 @@ import { TSDocConfigFile } from '@microsoft/tsdoc-config'
 import { l, dim, r, y } from './log'
 import ts from 'typescript'
 
-//? Load the nearest config file, for example `my-project/tsdoc.json`
-const tsdocConfigFile = TSDocConfigFile.loadForFolder('./')
-if (tsdocConfigFile.hasErrors) {
-	//? Report any errors
-	l(tsdocConfigFile.getErrorSummary())
+export function createTSDocParser(tsdocConfigPath: string) {
+	//? Load the config file
+	const tsdocConfigFile = TSDocConfigFile.loadForFolder(tsdocConfigPath)
+
+	if (tsdocConfigFile.hasErrors) {
+		l(tsdocConfigFile.getErrorSummary())
+	}
+
+	//? Use the TSDocConfigFile to configure the parser
+	const tsdocConfiguration = new TSDocConfiguration()
+	tsdocConfigFile.configureParser(tsdocConfiguration)
+
+	return new TSDocParser(tsdocConfiguration)
 }
 
-//? Use the TSDocConfigFile to configure the parser
-const tsdocConfiguration = new TSDocConfiguration()
-tsdocConfigFile.configureParser(tsdocConfiguration)
-
-const parser = new TSDocParser(tsdocConfiguration)
-
-export function parseCommentFromNode(node: Node) {
+export function parseCommentFromNode(node: Node, parser: TSDocParser) {
 	const commentString = node.getChildrenOfKind(ts.SyntaxKind.JSDoc)[0]?.getText()
-	return commentString ? parseComment(commentString) : undefined
+	return commentString ? parseComment(commentString, parser) : undefined
 }
 
 /**
  * Parses a comment string into a {@link TSDocComment}.
  * @param The jsdoc comment to parse.
  */
-export function parseComment(commentString: string): TSDocComment {
+export function parseComment(commentString: string, parser: TSDocParser): TSDocComment {
 	const { docComment } = parser.parseRange(TextRange.fromString(commentString))
 
 	const found: TSDocComment = {

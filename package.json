@@ -1,13 +1,15 @@
 {
     "name": "extractinator",
     "version": "0.1.0",
+    "type": "module",
     "description": "todo @fractalhq do this ty",
     "contributors": [
         "Braden Wiggins <braden@fracal-hq.com> (https://fractal-hq.com/)",
         "Willow (GHOST) <ghostdevbusiness@gmail.com> (https://ghostdev.xyz)"
     ],
     "scripts": {
-        "extractinator": "vite-node src/cli.ts --"
+        "extractinator": "vite-node src/cli.ts --",
+        "build": "tsup-node"
     },
     "dependencies": {
         "@microsoft/tsdoc": "^0.14.2",
@@ -22,6 +24,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.8.5",
+        "tsup": "^7.2.0",
         "vite": "^4.4.11",
         "vite-node": "^0.34.6"
     }

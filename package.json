@@ -9,6 +9,7 @@
     ],
     "scripts": {
         "extractinator": "vite-node src/cli.ts --",
+        "playground": "pnpm run extractinator extract playground playground/out --tsconfig .",
         "build": "tsup-node"
     },
     "dependencies": {

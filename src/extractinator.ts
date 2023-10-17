@@ -4,8 +4,8 @@ import type { TSDocParser } from '@microsoft/tsdoc'
 import { createTSDocParser, parseCommentFromNode } from './comments'
 import { getName, getType, isExported } from './utils/nodes'
 import { Project, SourceFile, Node } from 'ts-morph'
+import { l, b, n, o, g, r, dim } from './utils/log'
 import { mkdir, rm, writeFile } from 'fs/promises'
-import { l, b, n, o, g, dim } from './utils/log'
 import { emit } from './emit'
 import ts from 'typescript'
 
@@ -17,7 +17,7 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 	const dts = await emit(input)
 
 	//? Load all the generated Svelte .d.ts files
-	project.addSourceFilesAtPaths(`${dts.location}/**/*.svelte.d.ts`)
+	project.addSourceFilesAtPaths(`${dts.location}/**/*?(.svelte).d.ts`)
 
 	//? Make sure the output directory exists
 	await mkdir(output, { recursive: true })
@@ -25,6 +25,15 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 	const tsdoc = createTSDocParser(tsdocConfigPath)
 
 	for (const sourceFile of project.getSourceFiles()) {
+		const fileName = sourceFile.getBaseName()
+
+		if (!fileName.endsWith('.svelte.d.ts')) {
+			l(r(`Skipped file ${fileName}`))
+			n()
+
+			continue
+		}
+
 		const file = parseFile(sourceFile, tsdoc)
 
 		l(o(file.componentName))

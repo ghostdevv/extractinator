@@ -5,19 +5,65 @@ import type { Node } from 'ts-morph'
 import { TSDocConfiguration, DocExcerpt, TSDocParser, TextRange } from '@microsoft/tsdoc'
 import { TSDocConfigFile } from '@microsoft/tsdoc-config'
 import { l, dim, r, y } from './utils/log'
+import merge from '@fastify/deepmerge'
 import ts from 'typescript'
 
-export function createTSDocParser(tsdocConfigPath: string) {
-	//? Load the config file
-	const tsdocConfigFile = TSDocConfigFile.loadForFolder(tsdocConfigPath)
+const defaultTSDocConfig = {
+	$schema: 'https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json',
 
-	if (tsdocConfigFile.hasErrors) {
-		l(tsdocConfigFile.getErrorSummary())
+	tagDefinitions: [
+		{
+			tagName: '@default',
+			syntaxKind: 'block',
+			allowMultiple: false,
+		},
+		{
+			tagName: '@prop',
+			syntaxKind: 'block',
+			allowMultiple: true,
+		},
+		{
+			tagName: '@note',
+			syntaxKind: 'block',
+			allowMultiple: true,
+		},
+	],
+
+	supportForTags: {
+		'@default': true,
+		'@prop': true,
+		'@note': true,
+	},
+}
+
+export function createTSDocParser(tsdocConfigPath?: string) {
+	let config: TSDocConfigFile
+
+	if (tsdocConfigPath) {
+		//? Load the config from disk
+		const fileConfig = TSDocConfigFile.loadForFolder(tsdocConfigPath)
+
+		if (fileConfig.hasErrors) {
+			l(fileConfig.getErrorSummary())
+		}
+
+		//? Merge our default options with the config file
+		const options = merge({ all: true })(defaultTSDocConfig, fileConfig.saveToObject() || {})
+
+		config = TSDocConfigFile.loadFromObject(options)
+	} else {
+		//? Load the default options directly
+		config = TSDocConfigFile.loadFromObject(defaultTSDocConfig)
+	}
+
+	//? Log errors from the config if there are any
+	if (config.hasErrors) {
+		l(config.getErrorSummary())
 	}
 
 	//? Use the TSDocConfigFile to configure the parser
 	const tsdocConfiguration = new TSDocConfiguration()
-	tsdocConfigFile.configureParser(tsdocConfiguration)
+	config.configureParser(tsdocConfiguration)
 
 	return new TSDocParser(tsdocConfiguration)
 }

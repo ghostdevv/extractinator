@@ -9,7 +9,7 @@ import { l, b, n, o, g, dim } from './utils/log'
 import { emit } from './emit'
 import ts from 'typescript'
 
-export async function extractinator(input: string, output: string, tsdocConfigPath: string) {
+export async function extractinator(input: string, output: string, tsdocConfigPath?: string) {
 	//? Create ts-morph project
 	const project = new Project()
 

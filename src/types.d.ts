@@ -18,7 +18,7 @@ export interface ParsedSvelteFile {
 	 * KitchenSink.svelte
 	 * example.ts
 	 */
-	file: string
+	fileName: string
 
 	props: Bit[]
 	events: Bit[]

@@ -53,7 +53,7 @@ Output:
 
 ```json
 {
-  "file": "/workspace/extractinator/.extractinator-temp/KitchenSink.svelte.d.ts",
+  "fileName": "KitchenSink.svelte",
   "componentName": "KitchenSink",
   "props": [
     {

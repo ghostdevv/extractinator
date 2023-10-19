@@ -240,7 +240,7 @@ function parseFile(file: SourceFile, parser: TSDocParser): ParsedSvelteFile {
 	const variables = extractModuleExports(componentName, file, parser)
 
 	return {
-		file: file.getFilePath(),
+		fileName: `${componentName}.svelte`,
 		componentName,
 		props,
 		events,

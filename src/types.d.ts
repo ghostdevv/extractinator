@@ -3,10 +3,20 @@ declare global {
 }
 
 export interface ParsedSvelteFile {
+	/**
+	 * The name of the component
+	 *
+	 * @example
+	 * KitchenSink
+	 */
 	componentName: string
 
 	/**
-	 * Path to the file containing the source code.
+	 * The name of the file read
+	 *
+	 * @example
+	 * KitchenSink.svelte
+	 * example.ts
 	 */
 	file: string
 
@@ -38,15 +48,37 @@ export interface TSDocComment {
  * A bit of exported (documented) code.
  */
 export interface Bit {
-	/** Name of the variable belongs to. */
+	/**
+	 * Name of the bit. E.g. a variable name
+	 */
 	name: string
 
-	/** The typescript type of the variable. */
+	/**
+	 * The typescript type of the variable.
+	 */
 	type: string
 
+	/**
+	 * The TSDoc comment data
+	 */
 	comment?: TSDocComment
 }
 
 export interface SlotBit extends Omit<Bit, 'type'> {
+	/**
+	 * The props of the slot
+	 *
+	 * @example
+	 * Input:
+	 * <slot doSomething={true} />
+	 *
+	 * Output:
+	 * ```json
+	 * {
+	 * 	 "name": "doSomething",
+	 *   "type": "boolean"
+	 * }
+	 * ```
+	 */
 	props: Bit[]
 }

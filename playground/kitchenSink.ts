@@ -31,3 +31,21 @@ export interface Planet {
 export async function findRaxacoricofallapatorius(universeId: string) {
 	return {} as Planet
 }
+
+/**
+ * Do I need to say more?
+ */
+export default 'T.A.R.D.I.S.'
+
+/**
+ * A number called a
+ */
+const a = 10
+
+/**
+ * A number called b
+ */
+const b = 20
+
+export { a, b as c }
+export { b }

@@ -12,7 +12,7 @@ A work in progress cli tool for extracting type information & tsdoc from Svelte 
     - [x] Events
     - [x] Slots
 - [ ] Configure Svelte Version
-- [ ] Extract from TS/JS Files
+- [x] Extract from TS/JS Files
 
 ## Example
 

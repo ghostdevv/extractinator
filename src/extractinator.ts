@@ -1,5 +1,8 @@
+import type { ParsedFile } from './types'
+
 import { l, b, n, o, g, r, dim } from './utils/log'
 import { parseSvelteFile } from './files/svelte'
+import { parseTSFile } from './files/typescript'
 import { createTSDocParser } from './comments'
 import { mkdir, writeFile } from 'fs/promises'
 import { Project } from 'ts-morph'
@@ -20,8 +23,15 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 
 	const tsdoc = createTSDocParser(tsdocConfigPath)
 
+	//? Map of file_location:file
+	const parsed_files = new Map<string, ParsedFile>()
+
+	//? Loop over all the loaded source files
 	for (const sourceFile of project.getSourceFiles()) {
+		//? Get the filename e.g. KitchenSink.svelte.d.ts
 		const fileName = sourceFile.getBaseName()
+
+		//? Work out the file extension
 		const ext = fileName.endsWith('.svelte.d.ts')
 			? '.svelte.d.ts'
 			: fileName.endsWith('.d.ts')
@@ -31,8 +41,10 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 		l(`Processing File (${dim(ext)}) "${o(fileName)}"`)
 
 		switch (ext) {
+			//? Handle Svelte Files
 			case '.svelte.d.ts': {
 				const file = parseSvelteFile(sourceFile, tsdoc)
+				parsed_files.set(`${output}/${file.componentName}.doc.json`, file)
 
 				l(' ⤷', o(file.componentName))
 				l('  ', dim('Props:   '), b(file.props.length))
@@ -40,17 +52,26 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 				l('  ', dim('Events:  '), b(file.events.length))
 				l('  ', dim('Exports: '), b(file.variables.length))
 
-				await writeFile(
-					`${output}/${file.componentName}.doc.json`,
-					JSON.stringify(file, null, 2),
-					'utf-8',
-				)
 				break
 			}
 
-			case '.d.ts':
-				l(b(` ⤷ Skipped ts file for now`))
+			//? Handle TS/JS Files
+			case '.d.ts': {
+				const basename = fileName.replace(ext, '')
+
+				const file = parseTSFile(sourceFile, tsdoc)
+				parsed_files.set(`${output}/${basename}.doc.json`, file)
+
+				l(' ⤷', o(basename))
+
+				for (const { name } of file.exports) {
+					l('    ', g(name))
+				}
+
+				l('  ', dim('Exports: '), b(file.exports.length))
+
 				break
+			}
 
 			default:
 				l(r(` ⤷ Skipped unknown file`))
@@ -58,6 +79,11 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 		}
 
 		n()
+	}
+
+	for (const [location, file] of parsed_files) {
+		// todo could potentially collide
+		await writeFile(location, JSON.stringify(file, null, 2), 'utf-8')
 	}
 
 	//? Cleanup

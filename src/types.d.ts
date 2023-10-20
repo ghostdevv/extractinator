@@ -2,6 +2,24 @@ declare global {
 	const __VERSION__: string
 }
 
+export type ParsedFile = ParsedSvelteFile | ParsedTSFile
+
+export interface ParsedTSFile {
+	/**
+	 * The name of the file read
+	 *
+	 * @example
+	 * KitchenSink.svelte
+	 * example.ts
+	 */
+	fileName: string
+
+	/**
+	 * The exports from the component
+	 */
+	exports: Bit[]
+}
+
 export interface ParsedSvelteFile {
 	/**
 	 * The name of the component

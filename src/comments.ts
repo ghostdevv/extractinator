@@ -69,8 +69,8 @@ export function createTSDocParser(tsdocConfigPath?: string) {
 }
 
 export function parseCommentFromNode(node: Node, parser: TSDocParser) {
-	const commentString = node.getChildrenOfKind(ts.SyntaxKind.JSDoc)[0]?.getText()
-	return commentString ? parseComment(commentString, parser) : undefined
+	const tsdoc_node = node.getFirstChildByKind(ts.SyntaxKind.JSDoc)
+	return tsdoc_node ? parseComment(tsdoc_node.getText(), parser) : undefined
 }
 
 /**

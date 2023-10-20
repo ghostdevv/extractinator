@@ -6,7 +6,7 @@ import { parseCommentFromNode } from '../comments'
 import { getType } from '../utils/nodes'
 import ts from 'typescript'
 
-export function parseTSFile(file: SourceFile, tsdoc: TSDocParser): ParsedTSFile {
+export function parseTSFile(file_name: string, file: SourceFile, tsdoc: TSDocParser): ParsedTSFile {
 	const export_bits: Bit[] = []
 
 	//? Loop over all the export declarations
@@ -14,7 +14,7 @@ export function parseTSFile(file: SourceFile, tsdoc: TSDocParser): ParsedTSFile 
 		// todo handle this
 		if (declarations.length > 1) {
 			throw new Error(
-				`Multiple declarations are not handled yet, please file issue "${file.getBaseName()}"`,
+				`Multiple declarations are not handled yet, please file issue "${file_name}"`,
 			)
 		}
 
@@ -37,7 +37,7 @@ export function parseTSFile(file: SourceFile, tsdoc: TSDocParser): ParsedTSFile 
 	}
 
 	return {
-		fileName: file.getBaseName(),
+		fileName: file_name,
 		exports: export_bits,
 	}
 }

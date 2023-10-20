@@ -5,46 +5,54 @@ import { parseSvelteFile } from './files/svelte'
 import { parseTSFile } from './files/typescript'
 import { createTSDocParser } from './comments'
 import { mkdir, writeFile } from 'fs/promises'
+import { basename } from 'node:path'
 import { Project } from 'ts-morph'
 import { emit_dts } from './emit'
 
 export async function extractinator(input: string, output: string, tsdocConfigPath?: string) {
-	//? Create ts-morph project
 	const project = new Project()
 
-	//? Generate the .svelte.d.ts files
+	//? Generate the .d.ts files
 	const dts = await emit_dts(input)
 
-	//? Load all the generated Svelte .d.ts files
-	project.addSourceFilesAtPaths(`${dts.location}/**/*?(.svelte).d.ts`)
+	//? Load all the generated .d.ts files
+	for (const dts_path of dts.dts_file_map.keys()) {
+		project.addSourceFileAtPath(dts_path)
+	}
+
+	// project.addSourceFilesAtPaths(`${dts.location}/**/*?(.svelte).d.ts`)
 
 	//? Make sure the output directory exists
 	await mkdir(output, { recursive: true })
 
 	const tsdoc = createTSDocParser(tsdocConfigPath)
 
-	//? Map of file_location:file
+	//? Map of input_file_path:file
 	const parsed_files = new Map<string, ParsedFile>()
 
 	//? Loop over all the loaded source files
 	for (const sourceFile of project.getSourceFiles()) {
 		//? Get the filename e.g. KitchenSink.svelte.d.ts
-		const fileName = sourceFile.getBaseName()
+		const dts_file_name = sourceFile.getBaseName()
+
+		//? Get the input file name
+		const input_file_path = dts.dts_file_map.get(sourceFile.getFilePath())!
+		const file_name = basename(input_file_path)
 
 		//? Work out the file extension
-		const ext = fileName.endsWith('.svelte.d.ts')
+		const ext = dts_file_name.endsWith('.svelte.d.ts')
 			? '.svelte.d.ts'
-			: fileName.endsWith('.d.ts')
+			: dts_file_name.endsWith('.d.ts')
 			? '.d.ts'
 			: null
 
-		l(`Processing File (${dim(ext)}) "${o(fileName)}"`)
+		l(`Processing File (${dim(ext)}) "${o(file_name)}"`)
 
 		switch (ext) {
 			//? Handle Svelte Files
 			case '.svelte.d.ts': {
-				const file = parseSvelteFile(sourceFile, tsdoc)
-				parsed_files.set(`${output}/${file.componentName}.doc.json`, file)
+				const file = parseSvelteFile(file_name, sourceFile, tsdoc)
+				parsed_files.set(input_file_path, file)
 
 				l(' ⤷', o(file.componentName))
 				l('  ', dim('Props:   '), b(file.props.length))
@@ -57,10 +65,10 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 
 			//? Handle TS/JS Files
 			case '.d.ts': {
-				const basename = fileName.replace(ext, '')
+				const basename = dts_file_name.replace(ext, '')
 
-				const file = parseTSFile(sourceFile, tsdoc)
-				parsed_files.set(`${output}/${basename}.doc.json`, file)
+				const file = parseTSFile(file_name, sourceFile, tsdoc)
+				parsed_files.set(input_file_path, file)
 
 				l(' ⤷', o(basename))
 
@@ -81,9 +89,13 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 		n()
 	}
 
-	for (const [location, file] of parsed_files) {
+	for (const [input_file_path, file] of parsed_files) {
 		// todo could potentially collide
-		await writeFile(location, JSON.stringify(file, null, 2), 'utf-8')
+		await writeFile(
+			`${output}/${basename(input_file_path)}.doc.json`,
+			JSON.stringify(file, null, 2),
+			'utf-8',
+		)
 	}
 
 	//? Cleanup

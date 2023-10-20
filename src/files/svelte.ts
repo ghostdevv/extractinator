@@ -6,9 +6,13 @@ import { getName, getType, isExported, toBit } from '../utils/nodes'
 import { parseCommentFromNode } from '../comments'
 import ts from 'typescript'
 
-export function parseSvelteFile(file: SourceFile, parser: TSDocParser): ParsedSvelteFile {
+export function parseSvelteFile(
+	file_name: string,
+	file: SourceFile,
+	parser: TSDocParser,
+): ParsedSvelteFile {
 	//? Get the component name from the file name
-	const componentName = file.getBaseName().replace('.svelte.d.ts', '')
+	const componentName = file_name.replace('.svelte', '')
 
 	//? Get the props, events, slots nodes
 	const stuff = extractSvelteTypeNodes(file)
@@ -22,7 +26,7 @@ export function parseSvelteFile(file: SourceFile, parser: TSDocParser): ParsedSv
 	const variables = extractModuleExports(componentName, file, parser)
 
 	return {
-		fileName: `${componentName}.svelte`,
+		fileName: file_name,
 		componentName,
 		props,
 		events,

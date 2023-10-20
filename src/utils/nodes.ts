@@ -1,4 +1,8 @@
-import { Node } from 'ts-morph'
+import type { TSDocParser } from '@microsoft/tsdoc'
+import type { Node } from 'ts-morph'
+import type { Bit } from '../types'
+
+import { parseCommentFromNode } from '../comments'
 import ts from 'typescript'
 
 export function isExported(node: Node) {
@@ -25,4 +29,15 @@ export function getType(node: Node) {
 			//? Remove all `import("...")`
 			.replace(/import\((?:"|')[^]+?(?:"|')\)\./g, '')
 	)
+}
+
+/**
+ * Convert the node into a {@link Bit}
+ */
+export function toBit(node: Node, parser: TSDocParser): Bit {
+	return {
+		comment: parseCommentFromNode(node, parser),
+		name: getName(node) || 'it broke',
+		type: getType(node),
+	}
 }

@@ -25,6 +25,7 @@ export async function emit_dts(input: string) {
 	return {
 		location: TEMP_DIR,
 		async cleanup() {
+			if (process.env['DEBUG']) return
 			await rm(TEMP_DIR, { recursive: true })
 		},
 	}

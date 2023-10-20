@@ -23,7 +23,11 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 
 	for (const sourceFile of project.getSourceFiles()) {
 		const fileName = sourceFile.getBaseName()
-		const ext = fileName.endsWith('.svelte.d.ts') ? '.svelte.d.ts' : extname(fileName)
+		const ext = fileName.endsWith('.svelte.d.ts')
+			? '.svelte.d.ts'
+			: fileName.endsWith('.d.ts')
+			? '.d.ts'
+			: null
 
 		l(`Processing File (${dim(ext)}) "${o(fileName)}"`)
 

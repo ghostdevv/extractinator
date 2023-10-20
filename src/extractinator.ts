@@ -1,17 +1,16 @@
 import { l, b, n, o, g, r, dim } from './utils/log'
-import { mkdir, rm, writeFile } from 'fs/promises'
 import { parseSvelteFile } from './files/svelte'
 import { createTSDocParser } from './comments'
-import { extname } from 'node:path'
+import { mkdir, writeFile } from 'fs/promises'
 import { Project } from 'ts-morph'
-import { emit } from './emit'
+import { emit_dts } from './emit'
 
 export async function extractinator(input: string, output: string, tsdocConfigPath?: string) {
 	//? Create ts-morph project
 	const project = new Project()
 
 	//? Generate the .svelte.d.ts files
-	const dts = await emit(input)
+	const dts = await emit_dts(input)
 
 	//? Load all the generated Svelte .d.ts files
 	project.addSourceFilesAtPaths(`${dts.location}/**/*?(.svelte).d.ts`)
@@ -62,5 +61,5 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 	}
 
 	//? Cleanup
-	await rm(dts.location, { recursive: true })
+	await dts.cleanup()
 }

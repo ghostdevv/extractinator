@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url)
 
 const TEMP_DIR = resolve('.extractinator/dts')
 
-export async function emit(input: string) {
+export async function emit_dts(input: string) {
 	//? Cleanup & Create the TEMP_DIR
 	await rm(TEMP_DIR, { force: true, recursive: true })
 	await mkdir(TEMP_DIR, { recursive: true })
@@ -24,5 +24,8 @@ export async function emit(input: string) {
 
 	return {
 		location: TEMP_DIR,
+		async cleanup() {
+			await rm(TEMP_DIR, { recursive: true })
+		},
 	}
 }

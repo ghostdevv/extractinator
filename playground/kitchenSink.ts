@@ -25,8 +25,7 @@ export interface Planet {
 
 /**
  * Function to locate Raxacoricofallapatorius
- * @param {string} universeId The Id for the Universe this planet belongs to
- * @returns {Promise<Planet>}
+ * @param universeId The Id for the Universe this planet belongs to
  */
 export async function findRaxacoricofallapatorius(universeId: string) {
 	return {} as Planet

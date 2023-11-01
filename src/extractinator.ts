@@ -15,9 +15,9 @@ export interface ExtractinatorOptions {
 }
 
 export async function extractinator(options: ExtractinatorOptions) {
+	//? ts-morph project
 	const project = new Project()
 
-	//? Generate the .d.ts files
 	const dts = await emit_dts(options.input)
 
 	//? Load all the generated .d.ts files
@@ -27,6 +27,7 @@ export async function extractinator(options: ExtractinatorOptions) {
 
 	const tsdoc = createTSDocParser(options.tsdocConfigPath)
 
+	//? Parsed Svelte/TS Files
 	const parsed_files: ParsedFile[] = []
 
 	//? Loop over all the loaded source files
@@ -34,11 +35,12 @@ export async function extractinator(options: ExtractinatorOptions) {
 		//? Get the filename e.g. KitchenSink.svelte.d.ts
 		const dts_file_name = source_file.getBaseName()
 
-		//? Get the input file name
+		//? Find the input file path from the dts file path
 		const input_file_path = dts.dts_file_map.get(source_file.getFilePath())!
+
 		const file_name = basename(input_file_path)
 
-		//? Work out the file extension
+		//? Work out the file extension, needs to be done in specific order since ".d.ts" is shared
 		const ext = dts_file_name.endsWith('.svelte.d.ts')
 			? '.svelte.d.ts'
 			: dts_file_name.endsWith('.d.ts')
@@ -71,12 +73,10 @@ export async function extractinator(options: ExtractinatorOptions) {
 
 			//? Handle TS/JS Files
 			case '.d.ts': {
-				const basename = dts_file_name.replace(ext, '')
-
 				const file = parseTSFile(ctx)
 				parsed_files.push(file)
 
-				l(' ⤷', o(basename))
+				l(' ⤷', o(dts_file_name.replace(ext, '')))
 
 				for (const { name } of file.exports) {
 					l('    ', g(name))

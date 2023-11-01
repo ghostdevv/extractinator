@@ -82,6 +82,13 @@ export interface Bit {
 	comment?: TSDocComment
 }
 
+export interface ExportBit extends Bit {
+	/**
+	 * Whether the export is the default
+	 */
+	isDefaultExport: boolean
+}
+
 export interface SlotBit extends Omit<Bit, 'type'> {
 	/**
 	 * The props of the slot

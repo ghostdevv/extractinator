@@ -13,7 +13,7 @@ A work in progress cli tool for extracting type information & tsdoc from Svelte 
     - [x] Slots
 - [ ] Configure Svelte Version
 - [x] Extract from TS/JS Files
-    - [ ] Bool for default export
+    - [x] Bool for default export
 - [ ] Better typings for somethings
 
 ## Example

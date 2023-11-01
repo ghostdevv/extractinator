@@ -1,5 +1,5 @@
+import type { ExportBit, ParsedTSFile } from '../types'
 import type { TSDocParser } from '@microsoft/tsdoc'
-import type { Bit, ParsedTSFile } from '../types'
 import type { SourceFile } from 'ts-morph'
 
 import { parseCommentFromNode } from '../comments'
@@ -7,7 +7,7 @@ import { getType } from '../utils/nodes'
 import ts from 'typescript'
 
 export function parseTSFile(file_name: string, file: SourceFile, tsdoc: TSDocParser): ParsedTSFile {
-	const export_bits: Bit[] = []
+	const export_bits: ExportBit[] = []
 
 	//? Loop over all the export declarations
 	for (const [name, declarations] of file.getExportedDeclarations()) {
@@ -18,7 +18,6 @@ export function parseTSFile(file_name: string, file: SourceFile, tsdoc: TSDocPar
 			)
 		}
 
-		//? Let's only deal with a single array cast
 		const [declaration] = declarations
 
 		const tsdoc_node_parent = declaration.getFirstChildIfKind(ts.SyntaxKind.JSDoc)
@@ -32,6 +31,7 @@ export function parseTSFile(file_name: string, file: SourceFile, tsdoc: TSDocPar
 		export_bits.push({
 			name,
 			type: getType(declaration),
+			isDefaultExport: name == 'default',
 			comment: tsdoc_node_parent ? parseCommentFromNode(tsdoc_node_parent, tsdoc) : undefined,
 		})
 	}

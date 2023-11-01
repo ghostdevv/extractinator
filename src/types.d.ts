@@ -4,7 +4,7 @@ declare global {
 
 export type ParsedFile = ParsedSvelteFile | ParsedTSFile
 
-export interface ParsedTSFile {
+export interface BaseParsedFile {
 	/**
 	 * The name of the file read
 	 *
@@ -15,12 +15,22 @@ export interface ParsedTSFile {
 	fileName: string
 
 	/**
+	 * The absolute path to the source file used
+	 *
+	 * @example
+	 * /home/ghost/Desktop/extractinator/playground/KitchenSink.svelte
+	 */
+	filePath: string
+}
+
+export interface ParsedTSFile extends BaseParsedFile {
+	/**
 	 * The exports from the component
 	 */
 	exports: Bit[]
 }
 
-export interface ParsedSvelteFile {
+export interface ParsedSvelteFile extends BaseParsedFile {
 	/**
 	 * The name of the component
 	 *
@@ -28,15 +38,6 @@ export interface ParsedSvelteFile {
 	 * KitchenSink
 	 */
 	componentName: string
-
-	/**
-	 * The name of the file read
-	 *
-	 * @example
-	 * KitchenSink.svelte
-	 * example.ts
-	 */
-	fileName: string
 
 	props: Bit[]
 	events: Bit[]

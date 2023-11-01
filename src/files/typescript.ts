@@ -1,12 +1,16 @@
 import type { ExportBit, ParsedTSFile } from '../types'
-import type { TSDocParser } from '@microsoft/tsdoc'
-import type { SourceFile } from 'ts-morph'
+import type { FileParserContext } from './files'
 
 import { parseCommentFromNode } from '../comments'
 import { getType } from '../utils/nodes'
 import ts from 'typescript'
 
-export function parseTSFile(file_name: string, file: SourceFile, tsdoc: TSDocParser): ParsedTSFile {
+export function parseTSFile({
+	file_name,
+	input_file_path,
+	file,
+	tsdoc,
+}: FileParserContext): ParsedTSFile {
 	const export_bits: ExportBit[] = []
 
 	//? Loop over all the export declarations
@@ -38,6 +42,7 @@ export function parseTSFile(file_name: string, file: SourceFile, tsdoc: TSDocPar
 
 	return {
 		fileName: file_name,
+		filePath: input_file_path,
 		exports: export_bits,
 	}
 }

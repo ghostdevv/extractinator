@@ -34,9 +34,9 @@ export function getType(node: Node) {
 /**
  * Convert the node into a {@link Bit}
  */
-export function toBit(node: Node, parser: TSDocParser): Bit {
+export function toBit(node: Node, tsdoc: TSDocParser): Bit {
 	return {
-		comment: parseCommentFromNode(node, parser),
+		comment: parseCommentFromNode(node, tsdoc),
 		name: getName(node) || 'it broke',
 		type: getType(node),
 	}

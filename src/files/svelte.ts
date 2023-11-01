@@ -1,16 +1,18 @@
 import type { SlotBit, Bit, ParsedSvelteFile } from '../types'
 import type { TSDocParser } from '@microsoft/tsdoc'
+import type { FileParserContext } from './files'
 import type { SourceFile, Node } from 'ts-morph'
 
 import { getName, getType, isExported, toBit } from '../utils/nodes'
 import { parseCommentFromNode } from '../comments'
 import ts from 'typescript'
 
-export function parseSvelteFile(
-	file_name: string,
-	file: SourceFile,
-	parser: TSDocParser,
-): ParsedSvelteFile {
+export function parseSvelteFile({
+	file_name,
+	input_file_path,
+	file,
+	tsdoc,
+}: FileParserContext): ParsedSvelteFile {
 	//? Get the component name from the file name
 	const componentName = file_name.replace('.svelte', '')
 
@@ -18,15 +20,16 @@ export function parseSvelteFile(
 	const stuff = extractSvelteTypeNodes(file)
 
 	//? Parse the props, events, slots nodes to bits
-	const slots = stuff.slots?.map<SlotBit>((n) => parseSlot(n, parser)) || []
-	const events = stuff.events?.map<Bit>((n) => toBit(n, parser)) || []
-	const props = stuff.props?.map<Bit>((n) => toBit(n, parser)) || []
+	const slots = stuff.slots?.map<SlotBit>((n) => parseSlot(n, tsdoc)) || []
+	const events = stuff.events?.map<Bit>((n) => toBit(n, tsdoc)) || []
+	const props = stuff.props?.map<Bit>((n) => toBit(n, tsdoc)) || []
 
 	//? Extract the export bits
-	const variables = extractModuleExports(componentName, file, parser)
+	const variables = extractModuleExports(componentName, file, tsdoc)
 
 	return {
 		fileName: file_name,
+		filePath: input_file_path,
 		componentName,
 		props,
 		events,
@@ -121,7 +124,7 @@ function extractSvelteTypeNodes(file: SourceFile) {
 	}
 }
 
-function parseSlot(node: Node, parser: TSDocParser): SlotBit {
+function parseSlot(node: Node, tsdoc: TSDocParser): SlotBit {
 	/**
 	 * ? Slots look like this
 	 *
@@ -146,16 +149,16 @@ function parseSlot(node: Node, parser: TSDocParser): SlotBit {
 		.getChildrenOfKind(ts.SyntaxKind.TypeLiteral)[0]
 		?.getChildSyntaxList()
 		?.getChildren()
-		?.map((node) => toBit(node, parser))
+		?.map((node) => toBit(node, tsdoc))
 
 	return {
-		comment: parseCommentFromNode(node, parser),
+		comment: parseCommentFromNode(node, tsdoc),
 		name: getName(node) || 'it broke',
 		props: props || [],
 	}
 }
 
-function extractModuleExports(componentName: string, file: SourceFile, parser: TSDocParser) {
+function extractModuleExports(componentName: string, file: SourceFile, tsdoc: TSDocParser) {
 	//? Nodes we don't care about, they are handled elsewhere
 	const ignoredNodeNames = [
 		'default',
@@ -181,14 +184,14 @@ function extractModuleExports(componentName: string, file: SourceFile, parser: T
 						)!
 
 						return {
-							comment: parseCommentFromNode(node, parser),
+							comment: parseCommentFromNode(node, tsdoc),
 							name: getName(declaration) || 'it broke ahjk',
 							type: getType(declaration),
 						}
 					}
 
 					default:
-						return toBit(node, parser)
+						return toBit(node, tsdoc)
 				}
 			})
 	)

@@ -4,14 +4,15 @@ import { createRequire } from 'node:module'
 import { emitDts } from 'svelte2tsx'
 import { existsSync } from 'node:fs'
 import glob from 'tiny-glob'
-import { r } from './utils/log'
 
 const require = createRequire(import.meta.url)
 
 const DEBUG_MODE = typeof process.env['DEBUG'] == 'string'
-const TEMP_DIR = resolve('.extractinator/dts')
 
 export async function emit_dts(input: string) {
+	//? Generate a unique TEMP_DIR for this instance of extractinator
+	const TEMP_DIR = resolve(`.extractinator/dts-${DEBUG_MODE ? 'debug' : Date.now()}`)
+
 	if (!DEBUG_MODE || !existsSync(TEMP_DIR)) {
 		//? Cleanup & Create the TEMP_DIR
 		await rm(TEMP_DIR, { force: true, recursive: true })

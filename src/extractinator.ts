@@ -20,8 +20,6 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 		project.addSourceFileAtPath(dts_path)
 	}
 
-	// project.addSourceFilesAtPaths(`${dts.location}/**/*?(.svelte).d.ts`)
-
 	//? Make sure the output directory exists
 	await mkdir(output, { recursive: true })
 

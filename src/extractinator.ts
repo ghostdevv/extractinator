@@ -9,21 +9,23 @@ import { basename } from 'node:path'
 import { Project } from 'ts-morph'
 import { emit_dts } from './emit'
 
-export async function extractinator(input: string, output: string, tsdocConfigPath?: string) {
+export interface ExtractinatorOptions {
+	tsdocConfigPath?: string
+	input: string
+}
+
+export async function extractinator(options: ExtractinatorOptions) {
 	const project = new Project()
 
 	//? Generate the .d.ts files
-	const dts = await emit_dts(input)
+	const dts = await emit_dts(options.input)
 
 	//? Load all the generated .d.ts files
 	for (const dts_path of dts.dts_file_map.keys()) {
 		project.addSourceFileAtPath(dts_path)
 	}
 
-	//? Make sure the output directory exists
-	await mkdir(output, { recursive: true })
-
-	const tsdoc = createTSDocParser(tsdocConfigPath)
+	const tsdoc = createTSDocParser(options.tsdocConfigPath)
 
 	//? Map of input_file_path:file
 	const parsed_files = new Map<string, ParsedFile>()
@@ -87,15 +89,7 @@ export async function extractinator(input: string, output: string, tsdocConfigPa
 		n()
 	}
 
-	for (const [input_file_path, file] of parsed_files) {
-		// todo could potentially collide
-		await writeFile(
-			`${output}/${basename(input_file_path)}.doc.json`,
-			JSON.stringify(file, null, 2),
-			'utf-8',
-		)
-	}
-
-	//? Cleanup
 	await dts.cleanup()
+
+	return Array.from(parsed_files.values())
 }

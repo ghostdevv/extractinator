@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { mkdir, writeFile } from 'node:fs/promises'
 import { extractinator } from '../extractinator'
 import { resolve } from 'node:path'

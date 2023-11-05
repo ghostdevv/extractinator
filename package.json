@@ -8,7 +8,7 @@
         "Willow (GHOST) <ghostdevbusiness@gmail.com> (https://ghostdev.xyz)"
     ],
     "scripts": {
-        "extractinator": "DEBUG=1 vite-node src/cli.ts --",
+        "extractinator": "DEBUG=1 vite-node src/exports/cli.ts --",
         "playground": "pnpm run extractinator extract playground playground/out",
         "build": "tsup-node && publint"
     },

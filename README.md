@@ -100,6 +100,7 @@ Output:
 ```json
 {
   "fileName": "KitchenSink.svelte",
+  "filePath": "/workspace/extractinator/playground/KitchenSink.svelte",
   "componentName": "KitchenSink",
   "props": [
     {
@@ -132,7 +133,7 @@ Output:
       "props": []
     }
   ],
-  "variables": [
+  "exports": [
     {
       "comment": {
         "raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */\n",

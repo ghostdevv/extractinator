@@ -35,7 +35,7 @@ export interface ParsedTSFile extends BaseParsedFile {
 	/**
 	 * The exports from the ts file
 	 */
-	exports: Bit[]
+	exports: ExportBit[]
 }
 
 export interface ParsedSvelteFile extends BaseParsedFile {
@@ -143,7 +143,7 @@ export interface ParsedSvelteFile extends BaseParsedFile {
 	 * }
 	 * ```
 	 */
-	variables: Omit<ExportBit, 'isDefaultExport'>[]
+	exports: Omit<ExportBit, 'isDefaultExport'>[]
 }
 
 /**

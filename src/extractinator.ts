@@ -61,7 +61,7 @@ export async function extractinator(options: ExtractinatorOptions) {
 				l('  ', dim('Props:   '), b(file.props.length))
 				l('  ', dim('Slots:   '), b(file.slots.length))
 				l('  ', dim('Events:  '), b(file.events.length))
-				l('  ', dim('Exports: '), b(file.variables.length))
+				l('  ', dim('Exports: '), b(file.exports.length))
 
 				break
 			}

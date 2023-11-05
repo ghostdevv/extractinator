@@ -14,8 +14,7 @@ interface ExtractOtpions {
 }
 
 cli.command('extract <input> <output>')
-	.describe('Extract the nator')
-	// .option('--tsconfig', 'Path to a custom tsconfig.json')
+	.describe('Run extractinator against a folder of svelte/ts/js files and save it to the output')
 	.option('--tsdoc-config', 'Path to a custom tsdoc.json')
 	.action(async (input: string, output: string, options: ExtractOtpions) => {
 		input = resolve(input)

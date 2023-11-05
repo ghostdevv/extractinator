@@ -4,7 +4,7 @@ A tool to extract the api information from Svelte and TS/JS files. Extract slots
 
 ## CLI
 
-```
+```bash
 $ extractinator --help
 
   Usage
@@ -23,7 +23,7 @@ $ extractinator --help
 
 ### extract
 
-```
+```bash
 $ extractinator extract --help
 
   Description

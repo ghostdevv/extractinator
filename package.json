@@ -34,6 +34,14 @@
         "vite": "^4.4.11",
         "vite-node": "^0.34.6"
     },
+    "homepage": "https://github.com/ghostdevv/extractinator",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ghostdevv/extractinator"
+    },
+    "bugs": {
+        "url": "https://github.com/ghostdevv/extractinator"
+    },
     "bin": "./dist/cli.js",
     "main": "./dist/package.cjs",
     "module": "./dist/package.js",

@@ -1,20 +1,63 @@
 # Extractinator
 
-A work in progress cli tool for extracting type information & tsdoc from Svelte & TS/JS files.
+A tool to extract the api information from Svelte and TS/JS files. Extract slots, events, module exports, props, and css props all with parsed tsdoc comments.
 
-## Progress
+## CLI
 
-- [ ] Extract from Svelte Files
-    - [ ] CSS Props
-    - [ ] Component comment
-    - [x] Props
-    - [x] Module exports
-    - [x] Events
-    - [x] Slots
-- [ ] Configure Svelte Version
-- [x] Extract from TS/JS Files
-    - [x] Bool for default export
-- [ ] Better typings for somethings
+```
+$ extractinator --help
+
+  Usage
+    $ extractinator <command> [options]
+
+  Available Commands
+    extract    Extract the nator
+
+  For more info, run any command with the `--help` flag
+    $ extractinator extract --help
+
+  Options
+    -v, --version    Displays current version
+    -h, --help       Displays this message
+```
+
+### extract
+
+```
+$ extractinator extract --help
+
+  Description
+    Extract the nator
+
+  Usage
+    $ extractinator extract <input> <output> [options]
+
+  Options
+    --tsdoc-config    Path to a custom tsdoc.json
+    -h, --help        Displays this message
+```
+
+## JS API
+
+```ts
+import { extractinator } from 'extractinator'
+
+interface ExtractinatorOptions {
+	tsdocConfigPath?: string
+	input: string
+}
+
+const results = await extractinator({
+  // OPTIONAL
+  // path to a custom tsdoc config - this will be merged with the internal config
+  tsdocConfigPath: './tsdoc.json',
+
+  // REQUIRED
+  // Path to the input file(s), will recursively look in the directory for .svelte, .ts, and .js files
+  input: './playground'
+})
+
+```
 
 ## Example
 

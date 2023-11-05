@@ -1,5 +1,5 @@
+import type { ExtractinatorOptions, ParsedFile } from './types'
 import type { FileParserContext } from './files/files'
-import type { ParsedFile } from './types'
 
 import { l, b, n, o, g, r, dim } from './utils/log'
 import { parseSvelteFile } from './files/svelte'
@@ -8,11 +8,6 @@ import { createTSDocParser } from './comments'
 import { basename } from 'node:path'
 import { Project } from 'ts-morph'
 import { emit_dts } from './emit'
-
-export interface ExtractinatorOptions {
-	tsdocConfigPath?: string
-	input: string
-}
 
 export async function extractinator(options: ExtractinatorOptions) {
 	//? ts-morph project

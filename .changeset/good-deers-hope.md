@@ -1,5 +1,0 @@
----
-'extractinator': minor
----
-
-initial release

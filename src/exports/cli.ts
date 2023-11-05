@@ -1,8 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
-import { extractinator } from './extractinator'
+import { extractinator } from '../extractinator'
 import { resolve } from 'node:path'
 import sade from 'sade'
-import './types.d'
 
 const cli = sade('extractinator')
 

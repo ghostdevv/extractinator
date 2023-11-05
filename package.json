@@ -1,6 +1,6 @@
 {
     "name": "extractinator",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "type": "module",
     "description": "todo @fractalhq do this ty",
     "contributors": [
@@ -10,7 +10,7 @@
     "scripts": {
         "extractinator": "DEBUG=1 vite-node src/cli.ts --",
         "playground": "pnpm run extractinator extract playground playground/out",
-        "build": "tsup-node"
+        "build": "tsup-node && publint"
     },
     "dependencies": {
         "@fastify/deepmerge": "^1.3.0",
@@ -26,9 +26,34 @@
         "typescript": "^5.2.2"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.26.2",
+        "@svitejs/changesets-changelog-github-compact": "^1.1.0",
         "@types/node": "^20.8.5",
+        "publint": "^0.2.5",
         "tsup": "^7.2.0",
         "vite": "^4.4.11",
         "vite-node": "^0.34.6"
-    }
+    },
+    "bin": "./dist/cli.js",
+    "main": "./dist/package.cjs",
+    "module": "./dist/package.js",
+    "types": "./dist/package.d.ts",
+    "exports": {
+        ".": {
+            "require": {
+                "types": "./dist/package.d.cts",
+                "require": "./dist/package.cjs"
+            },
+            "import": {
+                "types": "./dist/package.d.ts",
+                "import": "./dist/package.js"
+            }
+        }
+    },
+    "files": [
+        "dist",
+        "LICENSE",
+        "README.md",
+        "CHANGELOG.md"
+    ]
 }

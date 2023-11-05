@@ -1,7 +1,3 @@
-declare global {
-	const __VERSION__: string
-}
-
 export type ParsedFile = ParsedSvelteFile | ParsedTSFile
 
 export interface BaseParsedFile {

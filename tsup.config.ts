@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup'
+import pkg from './package.json'
 
 export default defineConfig([
 	{
@@ -19,5 +20,8 @@ export default defineConfig([
 		target: 'esnext',
 		format: ['esm'],
 		entryPoints: ['src/exports/cli.ts'],
+		define: {
+			__VERSION__: `'${pkg.version}'`,
+		},
 	},
 ])

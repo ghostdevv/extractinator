@@ -1,6 +1,7 @@
 export { extractinator } from '../extractinator'
 
 export type {
+	ExtractinatorOptions,
 	BaseParsedFile,
 	ParsedFile,
 	ParsedSvelteFile,

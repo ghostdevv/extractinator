@@ -25,7 +25,7 @@ export function parseSvelteFile({
 	const props = stuff.props?.map<Bit>((n) => toBit(n, tsdoc)) || []
 
 	//? Extract the export bits
-	const variables = extractModuleExports(componentName, file, tsdoc)
+	const exports = extractModuleExports(componentName, file, tsdoc)
 
 	return {
 		fileName: file_name,
@@ -34,7 +34,7 @@ export function parseSvelteFile({
 		props,
 		events,
 		slots,
-		variables,
+		exports,
 	}
 }
 

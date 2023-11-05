@@ -1,3 +1,15 @@
+export interface ExtractinatorOptions {
+	/**
+	 * Path to your tsdoc config
+	 */
+	tsdocConfigPath?: string
+
+	/**
+	 * Path to your input svelte/ts/js files, it'll read the directory recursively
+	 */
+	input: string
+}
+
 export type ParsedFile = ParsedSvelteFile | ParsedTSFile
 
 export interface BaseParsedFile {
@@ -21,9 +33,9 @@ export interface BaseParsedFile {
 
 export interface ParsedTSFile extends BaseParsedFile {
 	/**
-	 * The exports from the component
+	 * The exports from the ts file
 	 */
-	exports: Bit[]
+	exports: ExportBit[]
 }
 
 export interface ParsedSvelteFile extends BaseParsedFile {
@@ -35,10 +47,103 @@ export interface ParsedSvelteFile extends BaseParsedFile {
 	 */
 	componentName: string
 
+	/**
+	 * The props of the component
+	 *
+	 * @example
+	 * Input:
+	 * ```svelte
+	 * <script>
+	 * 	export let open = false;
+	 * 	export let name: string;
+	 * </script>
+	 * ```
+	 *
+	 * Output:
+	 * ```json
+	 * [
+	 *   {
+	 * 	   "name": "open",
+	 * 	   "type": "boolean"
+	 * 	 },
+	 * 	 {
+	 *     "name": "name",
+	 *     "type": "string"
+	 *   }
+	 * ]
+	 * ```
+	 */
 	props: Bit[]
+
+	/**
+	 * The component events
+	 *
+	 * @example
+	 * Input:
+	 * ```svelte
+	 * <button on:click> Click Me </button>
+	 * ```
+	 *
+	 * Output:
+	 * ```json
+	 * [
+	 *   {
+	 * 	   "name": "click",
+	 * 	   "type": "HTMLElementEventMap"
+	 * 	 }
+	 * ]
+	 * ```
+	 */
 	events: Bit[]
+
+	/**
+	 * The props of the slot
+	 *
+	 * @example
+	 * Input:
+	 * ```svelte
+	 * <slot />
+	 * <slot name="test" />
+	 * ```
+	 *
+	 * Output:
+	 * ```json
+	 * [
+	 *   {
+	 *     "name": "default",
+	 *     "props": []
+	 *   },
+	 *   {
+	 *     "name": "test",
+	 *     "props": []
+	 *   }
+	 * ]
+	 * ```
+	 */
 	slots: SlotBit[]
-	variables: Bit[]
+
+	/**
+	 * The module exports of the component
+	 *
+	 * @example
+	 * Input:
+	 * ```svelte
+	 * <script context="module">
+	 *   import { writable } from 'svelte/store'
+	 *
+	 *	 export const state = writable<string | number | boolean>(true)
+	 * </script>
+	 * ```
+	 *
+	 * Output:
+	 * ```json
+	 * {
+	 *   "name": "state",
+	 *   "type": "Writable<string | number | boolean>"
+	 * }
+	 * ```
+	 */
+	exports: Omit<ExportBit, 'isDefaultExport'>[]
 }
 
 /**
@@ -92,14 +197,18 @@ export interface SlotBit extends Omit<Bit, 'type'> {
 	 *
 	 * @example
 	 * Input:
+	 * ```svelte
 	 * <slot doSomething={true} />
+	 * ```
 	 *
 	 * Output:
 	 * ```json
-	 * {
-	 * 	 "name": "doSomething",
-	 *   "type": "boolean"
-	 * }
+	 * [
+	 * 	 {
+	 * 	   "name": "doSomething",
+	 *     "type": "boolean"
+	 * 	 }
+	 * ]
 	 * ```
 	 */
 	props: Bit[]

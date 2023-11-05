@@ -2,4 +2,4 @@
 'extractinator': patch
 ---
 
-fix: **VERSION** is not defined error
+fix: `__VERSION__` is not defined error

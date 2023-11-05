@@ -1,6 +1,6 @@
 {
     "name": "extractinator",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "type": "module",
     "description": "todo @fractalhq do this ty",
     "contributors": [
@@ -26,6 +26,8 @@
         "typescript": "^5.2.2"
     },
     "devDependencies": {
+        "@changesets/cli": "^2.26.2",
+        "@svitejs/changesets-changelog-github-compact": "^1.1.0",
         "@types/node": "^20.8.5",
         "publint": "^0.2.5",
         "tsup": "^7.2.0",

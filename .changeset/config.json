@@ -1,0 +1,15 @@
+{
+    "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
+    "changelog": [
+        "@svitejs/changesets-changelog-github-compact",
+        {
+            "repo": "ghostdevv/extractinator"
+        }
+    ],
+    "commit": false,
+    "linked": [],
+    "access": "public",
+    "ignore": [],
+    "baseBranch": "main",
+    "updateInternalDependencies": "patch"
+}

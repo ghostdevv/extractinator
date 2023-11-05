@@ -1,5 +1,11 @@
 # extractinator
 
+## 0.2.1
+
+### Patch Changes
+
+-   fix: `__VERSION__` is not defined error ([`922d20f`](https://github.com/ghostdevv/extractinator/commit/922d20f206bb437a25ce01fbb7e00c7795497a30))
+
 ## 0.2.0
 
 ### Minor Changes

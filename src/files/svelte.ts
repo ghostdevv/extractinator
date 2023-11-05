@@ -27,9 +27,14 @@ export function parseSvelteFile({
 	//? Extract the export bits
 	const exports = extractModuleExports(componentName, file, tsdoc)
 
+	const component_class_node = file.getDefaultExportSymbol()?.getValueDeclaration()
+
 	return {
 		fileName: file_name,
 		filePath: input_file_path,
+		comment: component_class_node
+			? parseCommentFromNode(component_class_node, tsdoc)
+			: undefined,
 		componentName,
 		props,
 		events,

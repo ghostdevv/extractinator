@@ -48,6 +48,17 @@ export interface ParsedSvelteFile extends BaseParsedFile {
 	componentName: string
 
 	/**
+	 * The top level component comment
+	 *
+	 * @example
+	 * <!--
+	 *	 @component
+	 *   Kitchen Sink Svelte Component
+	 * -->
+	 */
+	comment?: TSDocComment
+
+	/**
 	 * The props of the component
 	 *
 	 * @example

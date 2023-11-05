@@ -101,6 +101,10 @@ Output:
 {
   "fileName": "KitchenSink.svelte",
   "filePath": "/workspace/extractinator/playground/KitchenSink.svelte",
+  "comment": {
+    "raw": "/**\n * Kitchen Sink Svelte Component\n */\n",
+    "summary": "Kitchen Sink Svelte Component"
+  },
   "componentName": "KitchenSink",
   "props": [
     {

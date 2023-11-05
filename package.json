@@ -2,7 +2,7 @@
     "name": "extractinator",
     "version": "0.2.0",
     "type": "module",
-    "description": "todo @fractalhq do this ty",
+    "description": "A tool to extract the api information from Svelte and TS/JS files. Extract slots, events, module exports, props, and css props all with parsed tsdoc comments.",
     "contributors": [
         "Braden Wiggins <braden@fracal-hq.com> (https://fractal-hq.com/)",
         "Willow (GHOST) <ghostdevbusiness@gmail.com> (https://ghostdev.xyz)"

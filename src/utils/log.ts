@@ -1,3 +1,4 @@
+import { type DocNode, DocExcerpt } from '@microsoft/tsdoc'
 import c from 'chalk'
 
 let log = typeof process.env['DEBUG'] == 'string';
@@ -85,4 +86,29 @@ export function n(
 	if (log) {
 		for (let i = 0; i < count; i++) console.log()
 	}
+}
+
+
+/**
+ * Pretty prints a {@link DocNode} tree to the console.
+ */
+export function logTSDocTree(
+	docNode: DocNode,
+	outputLines: string[] = [],
+	indent: string = '',
+) {
+	let dumpText: string = ''
+	if (docNode instanceof DocExcerpt) {
+		const content: string = docNode.content.toString()
+		dumpText += dim(`${indent}* ${docNode.excerptKind}: `) + b(JSON.stringify(content))
+	} else {
+		dumpText += `${indent}- ${docNode.kind}`
+	}
+	outputLines.push(dumpText)
+
+	for (const child of docNode.getChildNodes()) {
+		logTSDocTree(child, outputLines, indent + '  ')
+	}
+
+	return outputLines
 }

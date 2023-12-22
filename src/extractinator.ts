@@ -25,28 +25,16 @@ export async function extractinator(options: ExtractinatorOptions) {
 	//? Parsed Svelte/TS Files
 	const parsed_files: ParsedFile[] = []
 
-	//? Loop over all the loaded source files
 	for (const source_file of project.getSourceFiles()) {
-		//? Get the filename e.g. KitchenSink.svelte.d.ts
-		const dts_file_name = source_file.getBaseName()
+		const dts_path = source_file.getFilePath()
+		const src_path = dts_file_map.get(dts_path)!
 
-		//? Find the input file path from the dts file path
-		const input_file_path = dts.dts_file_map.get(source_file.getFilePath())!
-
-		const file_name = basename(input_file_path)
-
-		//? Work out the file extension, needs to be done in specific order since ".d.ts" is shared
-		const ext = dts_file_name.endsWith('.svelte.d.ts')
-			? '.svelte.d.ts'
-			: dts_file_name.endsWith('.d.ts')
-			? '.d.ts'
-			: null
-
-		l(`Processing File (${dim(ext)}) "${o(file_name)}"`)
+		const is_svelte = extname(src_path) === '.svelte'
+		const is_ts = extname(src_path) === '.ts'
 
 		const ctx: FileParserContext = {
-			file_name,
-			input_file_path,
+			file_name: basename(src_path),
+			input_file_path: relative(process.cwd(), src_path),
 			file: source_file,
 			tsdoc,
 		}

@@ -1,4 +1,4 @@
-import { basename, extname, relative, resolve } from 'node:path'
+import { extname, relative, resolve } from 'node:path'
 import { rm, mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { emitDts } from 'svelte2tsx'
@@ -42,13 +42,18 @@ export async function emit_dts(input: string) {
 			throw new Error(`Unable to handle "${input_path}"`)
 		}
 
-		//? Construct the path the dts file will be at
-		//? e.g. /home/ghost/input/Test.svelte -> /home/ghost/output/Test.svelte.d.ts
-		//? e.g. /home/ghost/input/test.ts -> /home/ghost/output/test.d.ts
-		const dts_path = `${TEMP_DIR}/${basename(input_path.replace(input, ''), '.ts')}.d.ts`
+		//? Construct the output path for the dts file.
+		// e.g. /home/ghost/input/Test.svelte -> /home/ghost/output/Test.svelte.d.ts
+		// e.g. /home/ghost/input/foo/test.ts -> /home/ghost/output/foo/test.d.ts
+
+		const relative_path = relative(input, input_path)
+		const input_ext = extname(relative_path)
+		const output_ext = input_ext === '.svelte' ? '.svelte.d.ts' : '.d.ts'
+
+		const dts_path = resolve(TEMP_DIR, relative_path.replace(input_ext, output_ext))
 
 		if (!existsSync(dts_path)) {
-			console.error({ dts_path, path: input_path })
+			console.error({ dts_path, input_path })
 			throw new Error(`Unable to find dts path for "${input_path}"`)
 		}
 

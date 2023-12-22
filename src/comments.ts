@@ -69,8 +69,18 @@ export function createTSDocParser(tsdocConfigPath?: string) {
 }
 
 export function parseCommentFromNode(node: Node, parser: TSDocParser) {
-	const tsdoc_node = node.getFirstChildByKind(ts.SyntaxKind.JSDoc)
-	return tsdoc_node ? parseComment(tsdoc_node.getText(), parser) : undefined
+	const tsdoc_node = node
+		.getChildrenOfKind(ts.SyntaxKind.JSDoc)
+		?.map((node) => node.getText())
+		// Filter out typedefs (they aren't particularly useful)
+		.filter((text) => {
+			// todo better solution
+			return !text.startsWith('/** @typedef {typeof __propDef.')
+		})
+
+	//? There should only be one comment per node (I think)
+	const comment = tsdoc_node?.[0]
+	return comment ? parseComment(comment, parser) : undefined
 }
 
 /**

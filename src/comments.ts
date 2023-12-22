@@ -181,7 +181,8 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
  * Renders a {@link DocNode} into a string.
  */
 export function render(docNode: DocNode): string {
-	let result: string = ''
+	let result = '';
+
 	if (docNode) {
 		if (docNode instanceof DocExcerpt) {
 			result += docNode.content.toString()
@@ -190,5 +191,6 @@ export function render(docNode: DocNode): string {
 			result += render(childNode)
 		}
 	}
-	return result.trim()
+
+	return result
 }

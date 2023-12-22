@@ -1,11 +1,17 @@
 import c from 'chalk'
 
+let log = typeof process.env['DEBUG'] == 'string';
+
+export function shouldLog(state: boolean) {
+	log = state;
+}
+
 // Ridiculously short color logging functions that
 // nobody should ever use. I just like them sometimes.
 
 /** console.log */
 export function l(...args: unknown[]) {
-	console.log(...args)
+	log && console.log(...args)
 }
 
 /** chalk.red */
@@ -56,6 +62,11 @@ export function dim(...args: unknown[]) {
 	return c.dim(...args)
 }
 
+/** chalk.dim */
+export function d(...args: unknown[]) {
+	return c.dim(...args)
+}
+
 /** chalk.bold */
 export function bd(...args: unknown[]) {
 	return c.bold(...args)
@@ -71,5 +82,7 @@ export function n(
 	 */
 	count = 1,
 ) {
-	for (let i = 0; i < count; i++) console.log()
+	if (log) {
+		for (let i = 0; i < count; i++) console.log()
+	}
 }

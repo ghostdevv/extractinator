@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { mkdir, writeFile } from 'node:fs/promises'
 import { extractinator } from '../extractinator'
-import { resolve } from 'node:path'
+import { extname, resolve } from 'node:path'
+import { shouldLog } from '../utils/log'
 import sade from 'sade'
 
 const cli = sade('extractinator')
@@ -11,14 +12,20 @@ cli.version(__VERSION__)
 interface ExtractOtpions {
 	// tsconfig: string
 	'tsdoc-config'?: string
+	quiet: boolean;
 }
 
 cli.command('extract <input> <output>')
 	.describe('Run extractinator against a folder of svelte/ts/js files and save it to the output')
-	.option('--tsdoc-config', 'Path to a custom tsdoc.json')
+	.option('--tsdoc-config, -t', 'Path to a custom tsdoc.json')
+	.option('--quiet, -q', 'Disable logging')
 	.action(async (input: string, output: string, options: ExtractOtpions) => {
 		input = resolve(input)
 		output = resolve(output)
+
+		if (options.quiet) {
+			shouldLog(false)
+		}
 
 		const extracted_files = await extractinator({
 			tsdocConfigPath: options['tsdoc-config'],

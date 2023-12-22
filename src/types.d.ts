@@ -160,7 +160,7 @@ export interface ParsedSvelteFile extends BaseParsedFile {
 /**
  * A human readable interface for a tsdoc comment.
  */
-export interface TSDocComment {
+export interface TSDocComment extends Modifiers {
 	summary?: string
 	remarks?: string
 	params?: { name: string; description: string }[]
@@ -173,6 +173,23 @@ export interface TSDocComment {
 	customBlocks?: { tagName: string; content: string }[]
 	/** The raw tsdoc comment. */
 	raw: string
+	// todo - decorator
+	// todo - eventProperty
+	// todo - deprecated
+}
+
+export interface Modifiers {
+	alpha?: boolean
+	beta?: boolean
+	eventProperty?: boolean
+	experimental?: boolean
+	internal?: boolean
+	override?: boolean
+	packageDocumentation?: boolean
+	public?: boolean
+	readonly?: boolean
+	sealed?: boolean
+	virtual?: boolean
 }
 
 /**

@@ -1,5 +1,5 @@
+import type { Modifiers, TSDocComment } from './types'
 import type { DocNode } from '@microsoft/tsdoc'
-import type { TSDocComment } from './types'
 import type { Node } from 'ts-morph'
 
 import { TSDocConfiguration, DocExcerpt, TSDocParser, TextRange } from '@microsoft/tsdoc'
@@ -126,6 +126,11 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 
 	if (docComment.seeBlocks.length) {
 		found.seeBlocks = docComment.seeBlocks.map((b) => render(b.content))
+	}
+
+	for (const modifier of docComment.modifierTagSet.nodes) {
+		const tagName = modifier.tagName.slice(1) as keyof Modifiers
+		found[tagName] = true
 	}
 
 	if (docComment.customBlocks.length) {

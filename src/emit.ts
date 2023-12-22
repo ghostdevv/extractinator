@@ -1,31 +1,31 @@
 import { extname, relative, resolve } from 'node:path'
 import { rm, mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+import { DEBUG_MODE } from './utils/env'
+import { b, d, l } from './utils/log'
 import { emitDts } from 'svelte2tsx'
 import { existsSync } from 'node:fs'
 import glob from 'tiny-glob'
 
 const require = createRequire(import.meta.url)
 
-const DEBUG_MODE = typeof process.env['DEBUG'] == 'string'
-
 export async function emit_dts(input: string) {
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
-	const TEMP_DIR = resolve(`.extractinator/dts-${DEBUG_MODE ? 'debug' : Date.now()}`)
+	const TEMP_DIR = resolve(`.extractinator/dts-${Date.now()}`)
 
-	if (!DEBUG_MODE || !existsSync(TEMP_DIR)) {
-		//? [re]create the TEMP_DIR.
-		await rm(TEMP_DIR, { force: true, recursive: true })
-		await mkdir(TEMP_DIR, { recursive: true })
+	l(d(`Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))
 
-		//? Use svelte2tsx to generate the dts files for Svelte/TS/JS.
-		await emitDts({
-			svelteShimsPath: require.resolve('svelte2tsx/svelte-shims-v4.d.ts'),
-			//? Relative path for the output - abs path won't work here.
-			declarationDir: relative(process.cwd(), TEMP_DIR),
-			libRoot: input,
-		})
-	}
+	//? [re]create the TEMP_DIR.
+	await rm(TEMP_DIR, { force: true, recursive: true })
+	await mkdir(TEMP_DIR, { recursive: true })
+
+	//? Use svelte2tsx to generate the dts files for Svelte/TS/JS.
+	await emitDts({
+		svelteShimsPath: require.resolve('svelte2tsx/svelte-shims-v4.d.ts'),
+		//? Relative path for the output - abs path won't work here.
+		declarationDir: relative(process.cwd(), TEMP_DIR),
+		libRoot: input,
+	})
 
 	// todo js files?
 	const input_file_paths = await glob(`${input}/**/*.{svelte,ts}`, {
@@ -67,7 +67,7 @@ export async function emit_dts(input: string) {
 	return {
 		dts_file_map,
 		async cleanup() {
-			if (process.env['DEBUG']) return
+			if (DEBUG_MODE) return
 			await rm(TEMP_DIR, { recursive: true })
 		},
 	}

@@ -1,10 +1,11 @@
 import { type DocNode, DocExcerpt } from '@microsoft/tsdoc'
+import { DEBUG_MODE } from './env'
 import c from 'chalk'
 
-let log = typeof process.env['DEBUG'] == 'string';
+let log = DEBUG_MODE
 
 export function shouldLog(state: boolean) {
-	log = state;
+	log = state
 }
 
 // Ridiculously short color logging functions that
@@ -88,15 +89,10 @@ export function n(
 	}
 }
 
-
 /**
  * Pretty prints a {@link DocNode} tree to the console.
  */
-export function logTSDocTree(
-	docNode: DocNode,
-	outputLines: string[] = [],
-	indent: string = '',
-) {
+export function logTSDocTree(docNode: DocNode, outputLines: string[] = [], indent: string = '') {
 	let dumpText: string = ''
 	if (docNode instanceof DocExcerpt) {
 		const content: string = docNode.content.toString()

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { mkdir, writeFile } from 'node:fs/promises'
 import { extractinator } from '../extractinator'
-import { extname, resolve } from 'node:path'
 import { shouldLog } from '../utils/log'
+import { resolve } from 'node:path'
 import sade from 'sade'
 
 const cli = sade('extractinator')
@@ -12,7 +12,7 @@ cli.version(__VERSION__)
 interface ExtractOtpions {
 	// tsconfig: string
 	'tsdoc-config'?: string
-	quiet: boolean;
+	quiet: boolean
 }
 
 cli.command('extract <input> <output>')

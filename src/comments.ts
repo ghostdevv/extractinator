@@ -138,7 +138,15 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 			switch (block.blockTag.tagName) {
 				case '@example':
 					found.examples ??= []
-					found.examples.push(render(block.content))
+					let content = render(block.content)
+
+					// If the first char is a space, remove it.
+					if (content.startsWith(' ')) {
+						content = content.slice(1)
+					}
+
+					const name = content.split('\n')?.[0]?.trim()
+					found.examples.push({ name, content: content.replace(name, '') })
 					break
 				case '@note':
 					found.notes ??= []

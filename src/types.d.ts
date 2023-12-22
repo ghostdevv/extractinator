@@ -168,7 +168,10 @@ export interface TSDocComment extends Modifiers {
 	defaultValue?: string
 	returns?: string
 	notes?: string[]
-	examples?: string[]
+	examples?: {
+		name?: string
+		content: string
+	}[]
 	seeBlocks?: string[]
 	customBlocks?: { tagName: string; content: string }[]
 	/** The raw tsdoc comment. */

@@ -23,9 +23,7 @@ cli.command('extract <input> <output>')
 		input = resolve(input)
 		output = resolve(output)
 
-		if (options.quiet) {
-			shouldLog(false)
-		}
+		shouldLog(!options.quiet)
 
 		const extracted_files = await extractinator({
 			tsdocConfigPath: options['tsdoc-config'],

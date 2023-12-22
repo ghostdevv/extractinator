@@ -10,18 +10,18 @@ const require = createRequire(import.meta.url)
 const DEBUG_MODE = typeof process.env['DEBUG'] == 'string'
 
 export async function emit_dts(input: string) {
-	//? Generate a unique TEMP_DIR for this instance of extractinator
+	//? Generate a unique TEMP_DIR for this instance of extractinator.
 	const TEMP_DIR = resolve(`.extractinator/dts-${DEBUG_MODE ? 'debug' : Date.now()}`)
 
 	if (!DEBUG_MODE || !existsSync(TEMP_DIR)) {
-		//? Cleanup & Create the TEMP_DIR
+		//? [re]create the TEMP_DIR.
 		await rm(TEMP_DIR, { force: true, recursive: true })
 		await mkdir(TEMP_DIR, { recursive: true })
 
-		//? Use svelte2tsx to generate the dts files for Svelte/TS/JS
+		//? Use svelte2tsx to generate the dts files for Svelte/TS/JS.
 		await emitDts({
 			svelteShimsPath: require.resolve('svelte2tsx/svelte-shims-v4.d.ts'),
-			//? Relative path for the output, abs path won't work here
+			//? Relative path for the output - abs path won't work here.
 			declarationDir: relative(process.cwd(), TEMP_DIR),
 			libRoot: input,
 		})
@@ -33,7 +33,11 @@ export async function emit_dts(input: string) {
 		absolute: true,
 	})
 
-	//? Map of dts_path:input_path
+	/**
+	 * ```
+	 * Map<dts_path, input_path>
+	 * ```
+	 */
 	const dts_file_map = new Map<string, string>()
 
 	for (const input_path of input_file_paths) {

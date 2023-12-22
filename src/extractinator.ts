@@ -1,11 +1,11 @@
 import type { ExtractinatorOptions, ParsedFile } from './types'
 import type { FileParserContext } from './files/files'
 
-import { l, b, n, o, g, r, dim } from './utils/log'
+import { basename, extname, relative } from 'node:path'
+import { l, b, n, o, g, r, d, bd } from './utils/log'
 import { parseSvelteFile } from './files/svelte'
 import { parseTSFile } from './files/typescript'
 import { createTSDocParser } from './comments'
-import { basename } from 'node:path'
 import { Project } from 'ts-morph'
 import { emit_dts } from './emit'
 
@@ -13,17 +13,19 @@ export async function extractinator(options: ExtractinatorOptions) {
 	//? ts-morph project
 	const project = new Project()
 
-	const dts = await emit_dts(options.input)
+	const { dts_file_map, cleanup } = await emit_dts(options.input)
 
 	//? Load all the generated .d.ts files
-	for (const dts_path of dts.dts_file_map.keys()) {
+	for (const dts_path of dts_file_map.keys()) {
 		project.addSourceFileAtPath(dts_path)
 	}
 
 	const tsdoc = createTSDocParser(options.tsdocConfigPath)
 
-	//? Parsed Svelte/TS Files
 	const parsed_files: ParsedFile[] = []
+	let total_exports = 0
+	let total_modules = 0
+	let total_components = 0
 
 	for (const source_file of project.getSourceFiles()) {
 		const dts_path = source_file.getFilePath()
@@ -39,33 +41,44 @@ export async function extractinator(options: ExtractinatorOptions) {
 			tsdoc,
 		}
 
-		switch (ext) {
-			//? Handle Svelte Files
-			case '.svelte.d.ts': {
+		switch (true) {
+			case is_svelte: {
 				const file = parseSvelteFile(ctx)
 				parsed_files.push(file)
 
-				l(' ⤷', o(file.componentName))
-				l('  ', dim('Props:   '), b(file.props.length))
-				l('  ', dim('Slots:   '), b(file.slots.length))
-				l('  ', dim('Events:  '), b(file.events.length))
-				l('  ', dim('Exports: '), b(file.exports.length))
+				l(o(file.componentName))
+
+				file.props.length && l(' ', d(g(file.props.length)), d('Props'))
+				file.slots.length && l(' ', d(g(file.slots.length)), d('Slots'))
+				file.events.length && l(' ', d(g(file.events.length)), d('Events'))
+				file.exports.length && l(' ', d(g(file.exports.length)), d('Exports'))
+
+				total_components++
+				total_exports += file.exports.length
 
 				break
 			}
 
-			//? Handle TS/JS Files
-			case '.d.ts': {
+			case is_ts: {
 				const file = parseTSFile(ctx)
 				parsed_files.push(file)
 
-				l(' ⤷', o(dts_file_name.replace(ext, '')))
+				l(b(file.fileName.replace('.ts', '')))
 
-				for (const { name } of file.exports) {
-					l('    ', g(name))
+				const count = file.exports.length
+
+				for (let i = 0; i < count; i++) {
+					total_exports++
+
+					const is_last = i === count - 1
+					const branch_char = is_last ? ' └' : ' ├'
+
+					const { name } = file.exports[i]
+
+					l(g(branch_char), d(name))
 				}
 
-				l('  ', dim('Exports: '), b(file.exports.length))
+				total_modules++
 
 				break
 			}
@@ -78,7 +91,18 @@ export async function extractinator(options: ExtractinatorOptions) {
 		n()
 	}
 
-	await dts.cleanup()
+	l(d('cleaning up...'))
+	await cleanup()
+
+	n(2)
+	l(bd('    Summary    '))
+	l(d(' ─────────────'))
+
+	l(o('components '), total_components)
+	l(b(' modules   '), total_modules)
+	l(d(' exports   '), total_exports)
+
+	n()
 
 	return parsed_files
 }

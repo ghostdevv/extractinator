@@ -1,6 +1,7 @@
 import { extname, relative, resolve } from 'node:path'
 import { rm, mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+import { get_temp_dir } from './utils/temp'
 import { DEBUG_MODE } from './utils/env'
 import { b, d, l } from './utils/log'
 import { emitDts } from 'svelte2tsx'
@@ -11,13 +12,9 @@ const require = createRequire(import.meta.url)
 
 export async function emit_dts(input: string) {
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
-	const TEMP_DIR = resolve(`.extractinator/dts-${Date.now()}`)
+	const TEMP_DIR = await get_temp_dir(`dts-${Date.now()}`)
 
 	l(d(`Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))
-
-	//? [re]create the TEMP_DIR.
-	await rm(TEMP_DIR, { force: true, recursive: true })
-	await mkdir(TEMP_DIR, { recursive: true })
 
 	//? Use svelte2tsx to generate the dts files for Svelte/TS/JS.
 	await emitDts({
@@ -66,7 +63,7 @@ export async function emit_dts(input: string) {
 
 	return {
 		dts_file_map,
-		async cleanup() {
+		async cleanup_dts() {
 			if (DEBUG_MODE) return
 			await rm(TEMP_DIR, { recursive: true })
 		},

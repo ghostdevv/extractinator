@@ -48,15 +48,14 @@ interface ExtractinatorOptions {
 }
 
 const results = await extractinator({
-  // OPTIONAL
-  // path to a custom tsdoc config - this will be merged with the internal config
-  tsdocConfigPath: './tsdoc.json',
+	// OPTIONAL
+	// path to a custom tsdoc config - this will be merged with the internal config
+	tsdocConfigPath: './tsdoc.json',
 
-  // REQUIRED
-  // Path to the input file(s), will recursively look in the directory for .svelte, .ts, and .js files
-  input: './playground'
+	// REQUIRED
+	// Path to the input file(s), will recursively look in the directory for .svelte, .ts, and .js files
+	input: './playground',
 })
-
 ```
 
 ## Example
@@ -75,7 +74,7 @@ Input:
 	 * The state the component is in
 	 * @default true
 	 */
-	export const state = writable<string | number | boolean>(true)
+	export const state = (writable < string) | number | (boolean > true)
 </script>
 
 <script lang="ts">
@@ -85,9 +84,7 @@ Input:
 	export let isOnEarth: boolean
 </script>
 
-<button on:click>
-	Is On Earth: {isOnEarth}
-</button>
+<button on:click> Is On Earth: {isOnEarth} </button>
 
 <div>
 	<slot {isOnEarth} />
@@ -99,54 +96,54 @@ Output:
 
 ```json
 {
-  "fileName": "KitchenSink.svelte",
-  "filePath": "/workspace/extractinator/playground/KitchenSink.svelte",
-  "comment": {
-    "raw": "/**\n * Kitchen Sink Svelte Component\n */\n",
-    "summary": "Kitchen Sink Svelte Component"
-  },
-  "componentName": "KitchenSink",
-  "props": [
-    {
-      "comment": {
-        "raw": "/**\n * Let the thing know whether it's on earth\n */\n",
-        "summary": "Let the thing know whether it's on earth"
-      },
-      "name": "isOnEarth",
-      "type": "boolean"
-    }
-  ],
-  "events": [
-    {
-      "name": "click",
-      "type": "HTMLElementEventMap"
-    }
-  ],
-  "slots": [
-    {
-      "name": "default",
-      "props": [
-        {
-          "name": "isOnEarth",
-          "type": "boolean"
-        }
-      ]
-    },
-    {
-      "name": "test",
-      "props": []
-    }
-  ],
-  "exports": [
-    {
-      "comment": {
-        "raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */\n",
-        "summary": "The state the component is in",
-        "defaultValue": "true"
-      },
-      "name": "state",
-      "type": "Writable<string | number | boolean>"
-    }
-  ]
+	"fileName": "KitchenSink.svelte",
+	"filePath": "/workspace/extractinator/playground/KitchenSink.svelte",
+	"comment": {
+		"raw": "/**\n * Kitchen Sink Svelte Component\n */\n",
+		"summary": "Kitchen Sink Svelte Component"
+	},
+	"componentName": "KitchenSink",
+	"props": [
+		{
+			"comment": {
+				"raw": "/**\n * Let the thing know whether it's on earth\n */\n",
+				"summary": "Let the thing know whether it's on earth"
+			},
+			"name": "isOnEarth",
+			"type": "boolean"
+		}
+	],
+	"events": [
+		{
+			"name": "click",
+			"type": "HTMLElementEventMap"
+		}
+	],
+	"slots": [
+		{
+			"name": "default",
+			"props": [
+				{
+					"name": "isOnEarth",
+					"type": "boolean"
+				}
+			]
+		},
+		{
+			"name": "test",
+			"props": []
+		}
+	],
+	"exports": [
+		{
+			"comment": {
+				"raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */\n",
+				"summary": "The state the component is in",
+				"defaultValue": "true"
+			},
+			"name": "state",
+			"type": "Writable<string | number | boolean>"
+		}
+	]
 }
 ```

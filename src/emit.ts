@@ -1,9 +1,9 @@
-import { extname, relative, resolve } from 'node:path'
+import { rm, copyFile, mkdir } from 'node:fs/promises'
+import { relative, dirname } from 'node:path'
 import { createRequire } from 'node:module'
 import { get_temp_dir } from './utils/temp'
 import { DEBUG_MODE } from './utils/env'
-import { rm } from 'node:fs/promises'
-import { b, d, l } from './utils/log'
+import { b, d, l, r } from './utils/log'
 import { emitDts } from 'svelte2tsx'
 import { existsSync } from 'node:fs'
 import glob from 'tiny-glob'
@@ -15,6 +15,7 @@ function get_ext(path: string) {
 	return ['.svelte', '.ts', '.d.ts'].includes(guess) ? guess : null
 }
 
+export async function emit_dts(input_dir: string) {
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
 	const TEMP_DIR = await get_temp_dir(`dts-${Date.now()}`)
 
@@ -25,11 +26,11 @@ function get_ext(path: string) {
 		svelteShimsPath: require.resolve('svelte2tsx/svelte-shims-v4.d.ts'),
 		//? Relative path for the output - abs path won't work here.
 		declarationDir: relative(process.cwd(), TEMP_DIR),
-		libRoot: input,
+		libRoot: input_dir,
 	})
 
 	// todo js files?
-	const input_file_paths = await glob(`${input}/**/*.{svelte,ts}`, {
+	const input_file_paths = await glob(`${input_dir}/**/*.{svelte,ts}`, {
 		filesOnly: true,
 		absolute: true,
 	})
@@ -50,17 +51,22 @@ function get_ext(path: string) {
 			continue
 		}
 
+		//? svelte2tsx doesn't generate dts files for d.ts files so we'll need to copy it across
+		if (input_path.endsWith('.d.ts')) {
+			const dest = input_path.replace(input_dir, TEMP_DIR)
+
+			await mkdir(dirname(dest), { recursive: true })
+			await copyFile(input_path, input_path.replace(input_dir, TEMP_DIR))
 		}
 
 		//? Construct the output path for the dts file.
 		// e.g. /home/ghost/input/Test.svelte -> /home/ghost/output/Test.svelte.d.ts
 		// e.g. /home/ghost/input/foo/test.ts -> /home/ghost/output/foo/test.d.ts
-
-		const relative_path = relative(input, input_path)
-		const input_ext = extname(relative_path)
-		const output_ext = input_ext === '.svelte' ? '.svelte.d.ts' : '.d.ts'
-
-		const dts_path = resolve(TEMP_DIR, relative_path.replace(input_ext, output_ext))
+		// todo could collide if had foo.d.ts and foo.ts in same folder in source
+		const dts_path = input_path
+			.replace(input_dir, TEMP_DIR)
+			.replace(/(\.d\.ts|\.ts)$/, '.d.ts')
+			.replace(/\.svelte$/, '.svelte.d.ts')
 
 		if (!existsSync(dts_path)) {
 			console.error({ dts_path, input_path })

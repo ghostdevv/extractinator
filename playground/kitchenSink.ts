@@ -48,3 +48,50 @@ const b = 20
 
 export { a, b as c }
 export { b }
+
+/**
+ * The universe
+ *
+ * @example Infinite Void
+ * ```ts
+ * const universe = new Universe()
+ * ```
+ *
+ * @example Big Bang
+ * ```ts
+ * const universe = new Universe([
+ *   {
+ *	    name: 'Earth',
+ *		universeId: '42',
+ *		location: [0, 0, 0],
+ *		delta: 0,
+ * 	 },
+ *   // ...
+ *  ])
+ *
+ * universe.explode()
+ * ```
+ */
+export class Universe {
+	constructor(
+		/**
+		 * The planets in the universe
+		 * @default []
+		 */
+		public planets: Planet[] = [],
+		/**
+		 * If the universe should explode.
+		 * @default false
+		 */
+		shouldExplode: boolean = false,
+	) {
+		if (shouldExplode) this.explode()
+	}
+
+	/**
+	 * Explode the universe
+	 */
+	explode() {
+		this.planets = []
+	}
+}

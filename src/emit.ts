@@ -10,7 +10,11 @@ import glob from 'tiny-glob'
 
 const require = createRequire(import.meta.url)
 
-export async function emit_dts(input: string) {
+function get_ext(path: string) {
+	const guess = path.slice(path.lastIndexOf('.'))
+	return ['.svelte', '.ts', '.d.ts'].includes(guess) ? guess : null
+}
+
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
 	const TEMP_DIR = await get_temp_dir(`dts-${Date.now()}`)
 
@@ -38,9 +42,14 @@ export async function emit_dts(input: string) {
 	const dts_file_map = new Map<string, string>()
 
 	for (const input_path of input_file_paths) {
-		// todo more file types then gracefully ignore
-		if (!['.svelte', '.ts'].includes(extname(input_path))) {
-			throw new Error(`Unable to handle "${input_path}"`)
+		const input_ext = get_ext(input_path)
+
+		if (!input_ext) {
+			// This shouldn't happen
+			l(r(`! Unable to handle "${input_path}", please report this bug`))
+			continue
+		}
+
 		}
 
 		//? Construct the output path for the dts file.

@@ -1,5 +1,13 @@
 # extractinator
 
+## 0.3.1
+
+### Patch Changes
+
+-   fix: don't error on unsupported files ([`c97b74f`](https://github.com/ghostdevv/extractinator/commit/c97b74f4303a784b688465e2b9521bdd60af6448))
+
+-   fix: handle source .d.ts files ([`c8f7a50`](https://github.com/ghostdevv/extractinator/commit/c8f7a5007ed6afc6526fd3e881b7545612b8acb2))
+
 ## 0.3.0
 
 ### Minor Changes

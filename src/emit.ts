@@ -58,8 +58,8 @@ export async function emit_dts(input: string) {
 		const dts_path = resolve(TEMP_DIR, relative_path.replace(input_ext, output_ext))
 
 		if (!existsSync(dts_path)) {
-			console.error({ dts_path, input_path })
-			throw new Error(`Unable to find dts path for "${input_path}"`)
+			lv(y('\nskipping file'), d(input_path))
+			continue
 		}
 
 		dts_file_map.set(dts_path, input_path)

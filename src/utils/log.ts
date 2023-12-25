@@ -92,11 +92,7 @@ export function n(
 /**
  * Pretty prints a {@link DocNode} tree to the console.
  */
-export function logTSDocTree(
-	docNode: DocNode,
-	outputLines: string[] = [],
-	indent: string = '',
-) {
+export function logTSDocTree(docNode: DocNode, outputLines: string[] = [], indent: string = '') {
 	let dumpText: string = ''
 	if (docNode instanceof DocExcerpt) {
 		const content: string = docNode.content.toString()
@@ -111,4 +107,47 @@ export function logTSDocTree(
 	}
 
 	return outputLines
+}
+
+const SVELTE_EXPORTS = ['props', 'slots', 'events', 'exports'] as const
+
+/**
+ * Pretty prints a {@link ParsedSvelteFile} to the console.
+ */
+export function logSvelteFile(file: ParsedSvelteFile) {
+	lv(o(file.fileName))
+	let i = 0
+	for (const kind of SVELTE_EXPORTS) {
+		i++
+
+		const count = file[kind].length
+		const is_last = i === SVELTE_EXPORTS.length
+		const branch_char = is_last ? ' └' : ' ├'
+		const plural = count === 1 ? kind.slice(0, -1) : kind
+
+		if (count) {
+			lv(d(branch_char, g(count), plural))
+		}
+		// else {
+		// 	lv(d(` ⏐`))
+		// }
+	}
+}
+
+/**
+ * Pretty prints a {@link ParsedFile} to the console.
+ */
+export function logTsFile(file: ParsedTSFile) {
+	lv(b(file.fileName))
+
+	const count = file.exports.length
+
+	for (let i = 0; i < count; i++) {
+		const is_last = i === count - 1
+		const branch_char = is_last ? ' └' : ' ├'
+
+		const { name } = file.exports[i]
+
+		lv(d(g(branch_char), name))
+	}
 }

@@ -23,13 +23,18 @@ export async function extractinator(options: ExtractinatorOptions) {
 	const tsdoc = createTSDocParser(options.tsdocConfigPath)
 
 	const parsed_files: ParsedFile[] = []
+
 	let total_exports = 0
 	let total_modules = 0
 	let total_components = 0
 
+	nv()
+
 	for (const source_file of project.getSourceFiles()) {
 		const dts_path = source_file.getFilePath()
-		const src_path = dts_file_map.get(dts_path)!
+		const src_path = dts_file_map.get(dts_path)
+
+		if (!src_path) throw new Error(`Unable to find source file for "${dts_path}"`)
 
 		const is_svelte = extname(src_path) === '.svelte'
 		const is_ts = extname(src_path) === '.ts'
@@ -46,13 +51,7 @@ export async function extractinator(options: ExtractinatorOptions) {
 				const file = parseSvelteFile(ctx)
 				parsed_files.push(file)
 
-				l(o(file.componentName))
-
-				file.props.length && l(' ', d(g(file.props.length)), d('Props'))
-				file.slots.length && l(' ', d(g(file.slots.length)), d('Slots'))
-				file.events.length && l(' ', d(g(file.events.length)), d('Events'))
-				file.exports.length && l(' ', d(g(file.exports.length)), d('Exports'))
-
+				logSvelteFile(file)
 				total_components++
 				total_exports += file.exports.length
 
@@ -63,35 +62,21 @@ export async function extractinator(options: ExtractinatorOptions) {
 				const file = parseTSFile(ctx)
 				parsed_files.push(file)
 
-				l(b(file.fileName.replace('.ts', '')))
-
-				const count = file.exports.length
-
-				for (let i = 0; i < count; i++) {
-					total_exports++
-
-					const is_last = i === count - 1
-					const branch_char = is_last ? ' └' : ' ├'
-
-					const { name } = file.exports[i]
-
-					l(g(branch_char), d(name))
-				}
-
+				logTsFile(file)
+				total_exports += parsed_files.length
 				total_modules++
 
 				break
 			}
 
 			default:
-				l(r(` ⤷ Skipped unknown file`))
+				lv(r(` ⤷ Skipped unknown file`))
 				break
 		}
 
-		n()
+		nv()
 	}
 
-	l(d('cleaning up...'))
 	await cleanup()
 
 	n(2)

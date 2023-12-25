@@ -91,7 +91,7 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 	const { docComment } = parser.parseRange(TextRange.fromString(commentString))
 
 	const found: TSDocComment = {
-		raw: docComment.emitAsTsdoc(),
+		raw: docComment.emitAsTsdoc().trimEnd(),
 	}
 
 	if (docComment.summarySection) {
@@ -138,15 +138,10 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 			switch (block.blockTag.tagName) {
 				case '@example':
 					found.examples ??= []
-					let content = render(block.content)
-
-					// If the first char is a space, remove it.
-					if (content.startsWith(' ')) {
-						content = content.slice(1)
-					}
+					let content = render(block.content, false)
 
 					const name = content.split('\n')?.[0]?.trim()
-					found.examples.push({ name, content: content.replace(name, '') })
+					found.examples.push({ name, content: content.replace(name, '').trim() })
 					break
 				case '@note':
 					found.notes ??= []
@@ -180,7 +175,7 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 /**
  * Renders a {@link DocNode} into a string.
  */
-export function render(docNode: DocNode): string {
+export function render(docNode: DocNode, trim = true): string {
 	let result = ''
 
 	if (docNode) {
@@ -188,9 +183,9 @@ export function render(docNode: DocNode): string {
 			result += docNode.content.toString()
 		}
 		for (const childNode of docNode.getChildNodes()) {
-			result += render(childNode)
+			result += render(childNode, trim)
 		}
 	}
 
-	return result
+	return trim ? result.trim() : result
 }

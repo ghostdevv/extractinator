@@ -24,8 +24,9 @@ export interface Planet {
 }
 
 /**
- * Function to locate Raxacoricofallapatorius
- * @param universeId The Id for the Universe this planet belongs to
+ * Function to locate Raxacoricofallapatorius.
+ * @param universeId The Id for the Universe this planet belongs to.
+ * @returns The {@link Planet} Raxacoricofallapatorius.
  */
 export async function findRaxacoricofallapatorius(universeId: string) {
 	return {} as Planet
@@ -33,16 +34,19 @@ export async function findRaxacoricofallapatorius(universeId: string) {
 
 /**
  * Do I need to say more?
+ * @deprecated
  */
 export default 'T.A.R.D.I.S.'
 
 /**
  * A number called a
+ * @internal
  */
 const a = 10
 
 /**
  * A number called b
+ * @customTag
  */
 const b = 20
 
@@ -51,6 +55,13 @@ export { b }
 
 /**
  * The universe
+ *
+ * @see https://en.wikipedia.org/wiki/Universe
+ *
+ * @remarks
+ * The universe is not to be confused with the multiverse.
+ *
+ * @beta
  *
  * @example Infinite Void
  * ```ts

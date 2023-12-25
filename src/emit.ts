@@ -1,6 +1,7 @@
 import { extname, relative, resolve } from 'node:path'
 import { rm, mkdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
+import { d, lv, o, y } from './utils/log'
 import { emitDts } from 'svelte2tsx'
 import { existsSync } from 'node:fs'
 import glob from 'tiny-glob'
@@ -11,7 +12,7 @@ const DEBUG_MODE = typeof process.env['DEBUG'] == 'string'
 
 export async function emit_dts(input: string) {
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
-	const TEMP_DIR = resolve(`.extractinator/dts-${DEBUG_MODE ? 'debug' : Date.now()}`)
+	const TEMP_DIR = resolve(`.extractinator`)
 
 	if (!DEBUG_MODE || !existsSync(TEMP_DIR)) {
 		//? [re]create the TEMP_DIR.
@@ -67,8 +68,12 @@ export async function emit_dts(input: string) {
 	return {
 		dts_file_map,
 		async cleanup() {
-			if (process.env['DEBUG']) return
-			await rm(TEMP_DIR, { recursive: true })
+			if (process.env['DEBUG']) {
+				lv(o('skipping cleanup in debug mode'))
+				return
+			}
+			lv(d('cleaning up...'))
+			await rm(TEMP_DIR, { recursive: true, force: true })
 		},
 	}
 }

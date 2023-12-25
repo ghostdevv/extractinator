@@ -4,7 +4,7 @@ import type { Node } from 'ts-morph'
 
 import { TSDocConfiguration, DocExcerpt, TSDocParser, TextRange } from '@microsoft/tsdoc'
 import { TSDocConfigFile } from '@microsoft/tsdoc-config'
-import { l, dim, r, y } from './utils/log'
+import { lv, dim, r, y } from './utils/log'
 import merge from '@fastify/deepmerge'
 import ts from 'typescript'
 
@@ -44,7 +44,7 @@ export function createTSDocParser(tsdocConfigPath?: string) {
 		const fileConfig = TSDocConfigFile.loadForFolder(tsdocConfigPath)
 
 		if (fileConfig.hasErrors) {
-			l(fileConfig.getErrorSummary())
+			lv(fileConfig.getErrorSummary())
 		}
 
 		//? Merge our default options with the config file
@@ -58,7 +58,7 @@ export function createTSDocParser(tsdocConfigPath?: string) {
 
 	//? Log errors from the config if there are any
 	if (config.hasErrors) {
-		l(config.getErrorSummary())
+		lv(config.getErrorSummary())
 	}
 
 	//? Use the TSDocConfigFile to configure the parser
@@ -181,7 +181,7 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
  * Renders a {@link DocNode} into a string.
  */
 export function render(docNode: DocNode): string {
-	let result = '';
+	let result = ''
 
 	if (docNode) {
 		if (docNode instanceof DocExcerpt) {

@@ -1,8 +1,8 @@
 import type { ExtractinatorOptions, ParsedFile } from './types'
 import type { FileParserContext } from './files/files'
 
+import { l, lv, b, n, nv, o, r, d, bd, logSvelteFile, logTsFile } from './utils/log'
 import { basename, extname, relative } from 'node:path'
-import { l, b, n, o, g, r, d, bd } from './utils/log'
 import { parseSvelteFile } from './files/svelte'
 import { parseTSFile } from './files/typescript'
 import { createTSDocParser } from './comments'
@@ -79,13 +79,13 @@ export async function extractinator(options: ExtractinatorOptions) {
 
 	await cleanup()
 
-	n(2)
-	l(bd('    Summary    '))
+	nv(2)
+	l(bd('   Extracted   '))
 	l(d(' ─────────────'))
 
-	l(o('components '), total_components)
-	l(b(' modules   '), total_modules)
-	l(d(' exports   '), total_exports)
+	l(o(' components '), total_components)
+	l(b(' modules    '), total_modules)
+	l(d(' exports    '), total_exports)
 
 	n()
 

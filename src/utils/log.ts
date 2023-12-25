@@ -1,10 +1,17 @@
-import { type DocNode, DocExcerpt } from '@microsoft/tsdoc'
+import { DocExcerpt, type DocNode } from '@microsoft/tsdoc'
 import c from 'chalk'
+import { ParsedSvelteFile, ParsedTSFile } from '../types'
 
-let log = typeof process.env['DEBUG'] == 'string';
+let _silence = false
+let _verbose = typeof process.env['DEBUG'] == 'string'
 
-export function shouldLog(state: boolean) {
-	log = state;
+export function silence() {
+	_silence = true
+	_verbose = false
+}
+
+export function verbose() {
+	_verbose = true
 }
 
 // Ridiculously short color logging functions that
@@ -12,7 +19,12 @@ export function shouldLog(state: boolean) {
 
 /** console.log */
 export function l(...args: unknown[]) {
-	log && console.log(...args)
+	!_silence && console.log(...args)
+}
+
+/** {@link l log} verbose - only logs when {@link _verbose} is `true` */
+export function lv(...args: unknown[]) {
+	_verbose && l(...args)
 }
 
 /** chalk.red */
@@ -83,11 +95,17 @@ export function n(
 	 */
 	count = 1,
 ) {
-	if (log) {
+	if (!_silence) {
 		for (let i = 0; i < count; i++) console.log()
 	}
 }
 
+/**
+ * {@link n Logs} an empty line when {@link _verbose} is `true`.
+ */
+export function nv(count = 1) {
+	_verbose && n(count)
+}
 
 /**
  * Pretty prints a {@link DocNode} tree to the console.

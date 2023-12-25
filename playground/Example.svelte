@@ -26,7 +26,7 @@
 
 <script lang="ts">
 	/**
-	 * Let the thing know whether it's on earth
+	 * Let the thing know whether it's an example or not.
 	 */
 	export let isExample: boolean
 </script>

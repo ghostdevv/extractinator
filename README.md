@@ -2,6 +2,14 @@
 
 A tool to extract the api information from Svelte and TS/JS files. Extract slots, events, module exports, props, and css props all with parsed tsdoc comments.
 
+## Requirements
+
+| Tool   | Version                           |
+| ------ | --------------------------------- |
+| Node   | v18 >=                            |
+| TS     | 5.3 (other v5 may work, untested) |
+| Svelte | v4                                |
+
 ## CLI
 
 ```bash

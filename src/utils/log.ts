@@ -1,9 +1,10 @@
 import { DocExcerpt, type DocNode } from '@microsoft/tsdoc'
-import c from 'chalk'
 import { ParsedSvelteFile, ParsedTSFile } from '../types'
+import { DEBUG_MODE } from './env'
+import c from 'chalk'
 
 let _silence = false
-let _verbose = typeof process.env['DEBUG'] == 'string'
+let _verbose = DEBUG_MODE
 
 export function silence() {
 	_silence = true

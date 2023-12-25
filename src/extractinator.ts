@@ -6,6 +6,7 @@ import { basename, extname, relative } from 'node:path'
 import { parseSvelteFile } from './files/svelte'
 import { parseTSFile } from './files/typescript'
 import { createTSDocParser } from './comments'
+import { clean_temp } from './utils/temp'
 import { Project } from 'ts-morph'
 import { emit_dts } from './emit'
 
@@ -13,7 +14,7 @@ export async function extractinator(options: ExtractinatorOptions) {
 	//? ts-morph project
 	const project = new Project()
 
-	const { dts_file_map, cleanup } = await emit_dts(options.input)
+	const { dts_file_map, cleanup_dts } = await emit_dts(options.input)
 
 	//? Load all the generated .d.ts files
 	for (const dts_path of dts_file_map.keys()) {
@@ -77,7 +78,9 @@ export async function extractinator(options: ExtractinatorOptions) {
 		nv()
 	}
 
-	await cleanup()
+	l(d('cleaning up...'))
+	await cleanup_dts()
+	await clean_temp()
 
 	nv(2)
 	l(bd('   Extracted   '))

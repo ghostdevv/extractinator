@@ -3,12 +3,11 @@ import { ParsedSvelteFile, ParsedTSFile } from '../types'
 import { DEBUG_MODE } from './env'
 import c from 'chalk'
 
-let _silence = false
+let _silence = true
 let _verbose = DEBUG_MODE
 
-export function silence() {
-	_silence = true
-	_verbose = false
+export function shouldLog(state: boolean) {
+	_silence = state
 }
 
 export function verbose() {

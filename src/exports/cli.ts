@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { mkdir, writeFile } from 'node:fs/promises'
 import { extractinator } from '../extractinator'
-import { silence, verbose } from '../utils/log'
+import { shouldLog, verbose } from '../utils/log'
 import { resolve } from 'node:path'
 import sade from 'sade'
 
@@ -25,8 +25,8 @@ cli.command('extract <input> <output>')
 		input = resolve(input)
 		output = resolve(output)
 
-		options.quiet && silence()
 		options.verbose && verbose()
+		shouldLog(!!options.quiet)
 
 		const extracted_files = await extractinator({
 			tsdocConfigPath: options['tsdoc-config'],

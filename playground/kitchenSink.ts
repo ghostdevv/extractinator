@@ -92,7 +92,7 @@ export class Universe {
 		public planets: Planet[] = [],
 		/**
 		 * If the universe should explode.
-		 * @default false
+		 * @defaultValue false
 		 */
 		shouldExplode: boolean = false,
 	) {

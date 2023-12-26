@@ -17,7 +17,6 @@ function get_ext(path: string) {
 
 export async function emit_dts(input_dir: string) {
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
-	// const TEMP_DIR = resolve(`.extractinator`)
 	const TEMP_DIR = await get_temp_dir(`dts-${Date.now()}`)
 
 	lv(d(`Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))

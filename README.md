@@ -27,8 +27,8 @@ $ extractinator --help
   Options
     -v, --version    Displays current version
     -h, --help       Displays this message
-	-q, --quiet		 Disabled all logging
-	--verbose		 Enables verbose logging
+	  -q, --quiet		 Disabled all logging
+	  --verbose		 Enables verbose logging
 ```
 
 ### extract
@@ -45,8 +45,8 @@ $ extractinator extract --help
   Options
     --tsdoc-config    Path to a custom tsdoc.json
     -h, --help        Displays this message
-	-q, --quiet		 Disabled all logging
-	--verbose		 Enables verbose logging
+	  -q, --quiet		 Disabled all logging
+	  --verbose		 Enables verbose logging
 ```
 
 ## JS API
@@ -120,64 +120,64 @@ Output:
 
 ````json
 {
-  "fileName": "Example.svelte",
-  "filePath": "playground/Example.svelte",
-  "comment": {
-    "raw": "/**\n * Example Svelte Component\n *\n * @example\n *\n * Simple\n * ```html\n * <Example />\n * ```\n *\n * @example\n *\n * Slots ```html <Example> <div slot=\"test\">Test</div> </Example>\n */",
-    "summary": "Example Svelte Component",
-    "examples": [
-      {
-        "name": "Simple",
-        "content": "```html\n<Example />\n```"
-      },
-      {
-        "name": "Slots",
-        "content": "```html\n<Example>\n\t<div slot=\"test\">Test</div>\n</Example>"
-      }
-    ]
-  },
-  "componentName": "Example",
-  "props": [
-    {
-      "comment": {
-        "raw": "/**\n * Let the thing know whether it's an example or not.\n */",
-        "summary": "Let the thing know whether it's an example or not."
-      },
-      "name": "isExample",
-      "type": "boolean"
-    }
-  ],
-  "events": [
-    {
-      "name": "click",
-      "type": "HTMLElementEventMap"
-    }
-  ],
-  "slots": [
-    {
-      "name": "default",
-      "props": [
-        {
-          "name": "isExample",
-          "type": "boolean"
-        }
-      ]
-    },
-    {
-      "name": "test",
-      "props": []
-    }
-  ],
-  "exports": [
-    {
-      "comment": {
-        "raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */",
-        "summary": "The state the component is in",
-        "defaultValue": "true"
-      },
-      "name": "state",
-      "type": "Writable<string | number | boolean>"
-    }
-  ]
+	"fileName": "Example.svelte",
+	"filePath": "playground/Example.svelte",
+	"comment": {
+		"raw": "/**\n * Example Svelte Component\n *\n * @example\n *\n * Simple\n * ```html\n * <Example />\n * ```\n *\n * @example\n *\n * Slots ```html <Example> <div slot=\"test\">Test</div> </Example>\n */",
+		"summary": "Example Svelte Component",
+		"examples": [
+			{
+				"name": "Simple",
+				"content": "```html\n<Example />\n```"
+			},
+			{
+				"name": "Slots",
+				"content": "```html\n<Example>\n\t<div slot=\"test\">Test</div>\n</Example>"
+			}
+		]
+	},
+	"componentName": "Example",
+	"props": [
+		{
+			"comment": {
+				"raw": "/**\n * Let the thing know whether it's an example or not.\n */",
+				"summary": "Let the thing know whether it's an example or not."
+			},
+			"name": "isExample",
+			"type": "boolean"
+		}
+	],
+	"events": [
+		{
+			"name": "click",
+			"type": "HTMLElementEventMap"
+		}
+	],
+	"slots": [
+		{
+			"name": "default",
+			"props": [
+				{
+					"name": "isExample",
+					"type": "boolean"
+				}
+			]
+		},
+		{
+			"name": "test",
+			"props": []
+		}
+	],
+	"exports": [
+		{
+			"comment": {
+				"raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */",
+				"summary": "The state the component is in",
+				"defaultValue": "true"
+			},
+			"name": "state",
+			"type": "Writable<string | number | boolean>"
+		}
+	]
 }
 ````

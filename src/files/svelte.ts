@@ -30,6 +30,7 @@ export function parseSvelteFile({
 	const component_class_node = file.getDefaultExportSymbol()?.getValueDeclaration()
 
 	return {
+		type: 'svelte',
 		fileName: file_name,
 		filePath: input_file_path,
 		comment: component_class_node

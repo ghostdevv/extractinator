@@ -124,6 +124,7 @@ Output:
 
 ````json
 {
+	"type": "svelte",
 	"fileName": "Example.svelte",
 	"filePath": "playground/Example.svelte",
 	"comment": {

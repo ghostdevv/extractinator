@@ -41,6 +41,7 @@ export function parseTSFile({
 	}
 
 	return {
+		type: 'ts',
 		fileName: file_name,
 		filePath: input_file_path,
 		exports: export_bits,

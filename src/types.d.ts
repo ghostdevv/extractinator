@@ -32,6 +32,8 @@ export interface BaseParsedFile {
 }
 
 export interface ParsedTSFile extends BaseParsedFile {
+	type: 'ts'
+
 	/**
 	 * The exports from the ts file
 	 */
@@ -39,6 +41,8 @@ export interface ParsedTSFile extends BaseParsedFile {
 }
 
 export interface ParsedSvelteFile extends BaseParsedFile {
+	type: 'svelte'
+
 	/**
 	 * The name of the component
 	 *

@@ -20,7 +20,7 @@ export async function emit_dts(input_dir: string) {
 	// const TEMP_DIR = resolve(`.extractinator`)
 	const TEMP_DIR = await get_temp_dir(`dts-${Date.now()}`)
 
-	l(d(`Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))
+	lv(d(`Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))
 
 	//? Use svelte2tsx to generate the dts files for Svelte/TS/JS.
 	await emitDts({

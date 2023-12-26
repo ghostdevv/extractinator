@@ -78,11 +78,13 @@ export async function extractinator(options: ExtractinatorOptions) {
 		nv()
 	}
 
-	l(d('cleaning up...'))
+	lv(d('cleaning up...'))
+
 	await cleanup_dts()
 	await clean_temp()
 
 	nv(2)
+
 	l(bd('   Extracted   '))
 	l(d(' ─────────────'))
 

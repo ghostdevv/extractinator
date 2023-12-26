@@ -1,6 +1,6 @@
 {
     "name": "extractinator",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "type": "module",
     "description": "A tool to extract the api information from Svelte and TS/JS files. Extract slots, events, module exports, props, and css props all with parsed tsdoc comments.",
     "contributors": [

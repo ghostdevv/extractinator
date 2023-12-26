@@ -60,10 +60,10 @@ interface ExtractinatorOptions {
 }
 
 const results = await extractinator({
-	// Path to the input file(s), will recursively look in the directory for .svelte, .ts, and .js files
+	// Path to the input file(s).  Will recursively search for svelte and ts files.
 	input: './playground',
 
-	// (optional) path to a custom tsdoc config - this will be merged with the internal config
+	// (optional) Path to a custom tsdoc config.  This will be merged with the internal config.
 	tsdocConfigPath: './tsdoc.json',
 })
 ```

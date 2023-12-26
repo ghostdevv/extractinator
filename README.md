@@ -27,6 +27,8 @@ $ extractinator --help
   Options
     -v, --version    Displays current version
     -h, --help       Displays this message
+	  -q, --quiet		 Disabled all logging
+	  --verbose		 Enables verbose logging
 ```
 
 ### extract
@@ -43,6 +45,8 @@ $ extractinator extract --help
   Options
     --tsdoc-config    Path to a custom tsdoc.json
     -h, --help        Displays this message
+	  -q, --quiet		 Disabled all logging
+	  --verbose		 Enables verbose logging
 ```
 
 ## JS API
@@ -70,11 +74,23 @@ const results = await extractinator({
 
 Input:
 
-```html
+````html
 <!-- 
 	@component
-	Kitchen Sink Svelte Component
- -->
+	Example Svelte Component
+
+	@example Simple
+	```html
+	<Example />
+	```
+
+	@example Slots
+	```html
+	<Example>
+		<div slot="test">Test</div>
+	</Example>
+-->
+
 <script context="module">
 	import { writable } from 'svelte/store'
 
@@ -89,35 +105,45 @@ Input:
 	/**
 	 * Let the thing know whether it's on earth
 	 */
-	export let isOnEarth: boolean
+	export let isExample: boolean
 </script>
 
-<button on:click> Is On Earth: {isOnEarth} </button>
+<button on:click> Is an example: {isExample} </button>
 
 <div>
-	<slot {isOnEarth} />
+	<slot {isExample} />
 	<slot name="test" />
 </div>
-```
+````
 
 Output:
 
-```json
+````json
 {
-	"fileName": "KitchenSink.svelte",
-	"filePath": "/workspace/extractinator/playground/KitchenSink.svelte",
+	"fileName": "Example.svelte",
+	"filePath": "playground/Example.svelte",
 	"comment": {
-		"raw": "/**\n * Kitchen Sink Svelte Component\n */\n",
-		"summary": "Kitchen Sink Svelte Component"
+		"raw": "/**\n * Example Svelte Component\n *\n * @example\n *\n * Simple\n * ```html\n * <Example />\n * ```\n *\n * @example\n *\n * Slots ```html <Example> <div slot=\"test\">Test</div> </Example>\n */",
+		"summary": "Example Svelte Component",
+		"examples": [
+			{
+				"name": "Simple",
+				"content": "```html\n<Example />\n```"
+			},
+			{
+				"name": "Slots",
+				"content": "```html\n<Example>\n\t<div slot=\"test\">Test</div>\n</Example>"
+			}
+		]
 	},
-	"componentName": "KitchenSink",
+	"componentName": "Example",
 	"props": [
 		{
 			"comment": {
-				"raw": "/**\n * Let the thing know whether it's on earth\n */\n",
-				"summary": "Let the thing know whether it's on earth"
+				"raw": "/**\n * Let the thing know whether it's an example or not.\n */",
+				"summary": "Let the thing know whether it's an example or not."
 			},
-			"name": "isOnEarth",
+			"name": "isExample",
 			"type": "boolean"
 		}
 	],
@@ -132,7 +158,7 @@ Output:
 			"name": "default",
 			"props": [
 				{
-					"name": "isOnEarth",
+					"name": "isExample",
 					"type": "boolean"
 				}
 			]
@@ -145,7 +171,7 @@ Output:
 	"exports": [
 		{
 			"comment": {
-				"raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */\n",
+				"raw": "/**\n * The state the component is in\n *\n * @default\n *\n * true\n */",
 				"summary": "The state the component is in",
 				"defaultValue": "true"
 			},
@@ -154,4 +180,4 @@ Output:
 		}
 	]
 }
-```
+````

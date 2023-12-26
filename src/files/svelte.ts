@@ -17,7 +17,7 @@ export function parseSvelteFile({
 	const componentName = file_name.replace('.svelte', '')
 
 	//? Get the props, events, slots nodes
-	const stuff = extractSvelteTypeNodes(file)
+	const stuff = extractSvelteTypeNodes(file, tsdoc)
 
 	//? Parse the props, events, slots nodes to bits
 	const slots = stuff.slots?.map<SlotBit>((n) => parseSlot(n, tsdoc)) || []
@@ -46,7 +46,7 @@ export function parseSvelteFile({
 /**
  * ? Find all the "key: value" nodes for props, events, and slots
  */
-function extractSvelteTypeNodes(file: SourceFile) {
+function extractSvelteTypeNodes(file: SourceFile, tsdoc: TSDocParser) {
 	//? Find the props, events, slots objects
 	const defs = file
 		//? Find the __propDef variable declaration
@@ -122,10 +122,34 @@ function extractSvelteTypeNodes(file: SourceFile) {
 		return events
 	}
 
+	const props = findDef('props')
+	const slots = findDef('slots')
+	const events = findEvents()
+
+	/**
+	 * When a component has no props, it tends to
+	 * have a single prop that looks like this:
+	 *
+	 ** {
+	 **   comment: undefined,
+	 **   name: "__index",
+	 **   type: "any"
+	 ** }
+	 *
+	 * This is rather useless, so we want to filter it out.
+	 */
+	if (props?.length === 1) {
+		const { name, type } = toBit(props[0], tsdoc)
+
+		if (name === '__index' && type === 'any') {
+			props.pop()
+		}
+	}
+
 	return {
-		props: findDef('props'),
-		slots: findDef('slots'),
-		events: findEvents(),
+		props,
+		slots,
+		events,
 	}
 }
 

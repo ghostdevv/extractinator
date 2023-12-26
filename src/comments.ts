@@ -4,7 +4,7 @@ import type { Node } from 'ts-morph'
 
 import { TSDocConfiguration, DocExcerpt, TSDocParser, TextRange } from '@microsoft/tsdoc'
 import { TSDocConfigFile } from '@microsoft/tsdoc-config'
-import { l, dim, r, y } from './utils/log'
+import { lv, dim, r, y } from './utils/log'
 import merge from '@fastify/deepmerge'
 import ts from 'typescript'
 
@@ -44,7 +44,7 @@ export function createTSDocParser(tsdocConfigPath?: string) {
 		const fileConfig = TSDocConfigFile.loadForFolder(tsdocConfigPath)
 
 		if (fileConfig.hasErrors) {
-			l(fileConfig.getErrorSummary())
+			lv(fileConfig.getErrorSummary())
 		}
 
 		//? Merge our default options with the config file
@@ -58,7 +58,7 @@ export function createTSDocParser(tsdocConfigPath?: string) {
 
 	//? Log errors from the config if there are any
 	if (config.hasErrors) {
-		l(config.getErrorSummary())
+		lv(config.getErrorSummary())
 	}
 
 	//? Use the TSDocConfigFile to configure the parser
@@ -91,7 +91,7 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 	const { docComment } = parser.parseRange(TextRange.fromString(commentString))
 
 	const found: TSDocComment = {
-		raw: docComment.emitAsTsdoc(),
+		raw: docComment.emitAsTsdoc().trimEnd(),
 	}
 
 	if (docComment.summarySection) {
@@ -138,15 +138,10 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 			switch (block.blockTag.tagName) {
 				case '@example':
 					found.examples ??= []
-					let content = render(block.content)
-
-					// If the first char is a space, remove it.
-					if (content.startsWith(' ')) {
-						content = content.slice(1)
-					}
+					let content = render(block.content, false)
 
 					const name = content.split('\n')?.[0]?.trim()
-					found.examples.push({ name, content: content.replace(name, '') })
+					found.examples.push({ name, content: content.replace(name, '').trim() })
 					break
 				case '@note':
 					found.notes ??= []
@@ -180,17 +175,17 @@ export function parseComment(commentString: string, parser: TSDocParser): TSDocC
 /**
  * Renders a {@link DocNode} into a string.
  */
-export function render(docNode: DocNode): string {
-	let result = '';
+export function render(docNode: DocNode, trim = true): string {
+	let result = ''
 
 	if (docNode) {
 		if (docNode instanceof DocExcerpt) {
 			result += docNode.content.toString()
 		}
 		for (const childNode of docNode.getChildNodes()) {
-			result += render(childNode)
+			result += render(childNode, trim)
 		}
 	}
 
-	return result
+	return trim ? result.trim() : result
 }

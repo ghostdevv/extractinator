@@ -1,7 +1,19 @@
 <!-- 
 	@component
-	Kitchen Sink Svelte Component
- -->
+	Example Svelte Component
+
+	@example Simple
+	```html
+	<Example />
+	```
+
+	@example Slots
+	```html
+	<Example>
+		<div slot="test">Test</div>
+	</Example>
+-->
+
 <script context="module">
 	import { writable } from 'svelte/store'
 
@@ -14,16 +26,16 @@
 
 <script lang="ts">
 	/**
-	 * Let the thing know whether it's on earth
+	 * Let the thing know whether it's an example or not.
 	 */
-	export let isOnEarth: boolean
+	export let isExample: boolean
 </script>
 
 <button on:click>
-	Is On Earth: {isOnEarth}
+	Is an example: {isExample}
 </button>
 
 <div>
-	<slot {isOnEarth} />
+	<slot {isExample} />
 	<slot name="test" />
 </div>

@@ -78,8 +78,6 @@ export async function extractinator(options: ExtractinatorOptions) {
 		nv()
 	}
 
-	lv(d('cleaning up...'))
-
 	await cleanup_dts()
 	await clean_temp()
 

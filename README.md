@@ -2,6 +2,20 @@
 
 A tool to extract the api information from Svelte and TS/JS files. Extract slots, events, module exports, props, and css props all with parsed tsdoc comments.
 
+<br>
+
+## Usage
+
+Install
+
+`pnpm i -D extractinator`
+
+Extract
+
+`pnpm extractinator extract <input_folder> <output_folder>`
+
+<br>
+
 ## Requirements
 
 | Tool   | Version                           |
@@ -9,6 +23,8 @@ A tool to extract the api information from Svelte and TS/JS files. Extract slots
 | Node   | v18 >=                            |
 | TS     | 5.3 (other v5 may work, untested) |
 | Svelte | v4                                |
+
+<br>
 
 ## CLI
 
@@ -25,29 +41,13 @@ $ extractinator --help
     $ extractinator extract --help
 
   Options
-    -v, --version    Displays current version
-    -h, --help       Displays this message
-	  -q, --quiet		 Disabled all logging
-	  --verbose		 Enables verbose logging
+    --version  -v   Displays current version
+    --help     -h   Displays this message
+    --quiet    -q   Disabled all logging
+    --verbose	    Enables verbose logging
 ```
 
-### extract
-
-```bash
-$ extractinator extract --help
-
-  Description
-    Extract the nator
-
-  Usage
-    $ extractinator extract <input> <output> [options]
-
-  Options
-    --tsdoc-config    Path to a custom tsdoc.json
-    -h, --help        Displays this message
-	  -q, --quiet		 Disabled all logging
-	  --verbose		 Enables verbose logging
-```
+<br>
 
 ## JS API
 
@@ -55,24 +55,26 @@ $ extractinator extract --help
 import { extractinator } from 'extractinator'
 
 interface ExtractinatorOptions {
-	tsdocConfigPath?: string
 	input: string
+	tsdocConfigPath?: string
 }
 
 const results = await extractinator({
-	// OPTIONAL
-	// path to a custom tsdoc config - this will be merged with the internal config
-	tsdocConfigPath: './tsdoc.json',
-
-	// REQUIRED
 	// Path to the input file(s), will recursively look in the directory for .svelte, .ts, and .js files
 	input: './playground',
+
+	// (optional) path to a custom tsdoc config - this will be merged with the internal config
+	tsdocConfigPath: './tsdoc.json',
 })
 ```
+
+<br>
 
 ## Example
 
 Input:
+
+`Example.svelte`
 
 ````html
 <!-- 
@@ -117,6 +119,8 @@ Input:
 ````
 
 Output:
+
+`Example.svelte.doc.json`
 
 ````json
 {

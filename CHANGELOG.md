@@ -1,5 +1,25 @@
 # extractinator
 
+## 0.4.0
+
+### Minor Changes
+
+-   feat: add `type` field to output ([`31495390342edf3ec1517c8c0cc62da08c0be625`](https://github.com/ghostdevv/extractinator/commit/31495390342edf3ec1517c8c0cc62da08c0be625))
+
+-   feat: verbose logging mode ([#28](https://github.com/ghostdevv/extractinator/pull/28))
+
+### Patch Changes
+
+-   fix: trim comment outputs ([#28](https://github.com/ghostdevv/extractinator/pull/28))
+
+-   breaking: update to ts 5.3 and outline minimum dep versions ([`d01fadd2c92f5211b7a6caf4ad0ee0975a9209d3`](https://github.com/ghostdevv/extractinator/commit/d01fadd2c92f5211b7a6caf4ad0ee0975a9209d3))
+
+-   fix: skip files with no exports ([#28](https://github.com/ghostdevv/extractinator/pull/28))
+
+-   fix: filter out \_\_index: any props ([#28](https://github.com/ghostdevv/extractinator/pull/28))
+
+-   fix: not deleting temp folders correctly ([#28](https://github.com/ghostdevv/extractinator/pull/28))
+
 ## 0.3.1
 
 ### Patch Changes

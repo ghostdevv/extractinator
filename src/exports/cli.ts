@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, stat, writeFile } from 'node:fs/promises'
+import { r, shouldLog, verbose } from '../utils/log'
 import { extractinator } from '../extractinator'
-import { shouldLog, verbose } from '../utils/log'
 import { resolve } from 'node:path'
 import sade from 'sade'
 
@@ -27,6 +27,18 @@ cli.command('extract <input> <output>')
 
 		options.verbose && verbose()
 		shouldLog(!!options.quiet)
+
+		//? First, let's figure out if the input is a file or a folder.
+		const input_stat = await stat(input)
+
+		if (!input_stat) {
+			throw new Error(`Unable to find input: "${input}"`)
+		}
+
+		if (input_stat.isFile()) {
+			console.error(r(`Error:`), `Input is a file, please provide a folder.`)
+			return
+		}
 
 		const extracted_files = await extractinator({
 			tsdocConfigPath: options['tsdoc-config'],

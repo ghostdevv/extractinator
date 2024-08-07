@@ -10,4 +10,4 @@ export type {
 	ExportBit,
 	SlotBit,
 	Bit,
-} from '../types.d'
+} from '../types'

@@ -11,6 +11,7 @@ import { Project } from 'ts-morph'
 import { emit_dts } from './emit'
 
 export async function extractinator(options: ExtractinatorOptions) {
+	console.clear() //! DELETEME
 	//? ts-morph project
 	const project = new Project()
 
@@ -81,7 +82,8 @@ export async function extractinator(options: ExtractinatorOptions) {
 	await cleanup_dts()
 	await clean_temp()
 
-	nv(2)
+	nv(1)
+	n()
 
 	l(bd('   Extracted   '))
 	l(d(' ─────────────'))

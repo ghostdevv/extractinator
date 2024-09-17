@@ -8,9 +8,12 @@
         "Willow (GHOST) <ghostdevbusiness@gmail.com> (https://ghostdev.xyz)"
     ],
     "scripts": {
-        "extractinator": "DEBUG=1 vite-node src/exports/cli.ts --",
-        "playground": "pnpm run extractinator extract playground playground/out",
-        "build": "tsup-node && publint"
+		"extractinator": "DEBUG=1 vite-node src/exports/cli.ts --",
+		"extractinator:watch": "DEBUG=1 vite-node --watch src/exports/cli.ts --",
+		"playground": "pnpm run extractinator extract playground playground/out",
+		"playground2": "pnpm run extractinator:watch extract playground2/in playground2/out --log-level=verbose",
+		"build": "tsup-node && publint",
+		"build:watch": "tsup-node --watch"
     },
     "dependencies": {
         "@fastify/deepmerge": "^1.3.0",

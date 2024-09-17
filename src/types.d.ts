@@ -8,6 +8,11 @@ export interface ExtractinatorOptions {
 	 * Path to your input svelte/ts/js files, it'll read the directory recursively
 	 */
 	input: string
+
+	/**
+	 * Homepage of your project's documentation.  Used to generate urls to the source code for `@link` tags.
+	 */
+	homepage?: string
 }
 
 export type ParsedFile = ParsedSvelteFile | ParsedTSFile
@@ -161,6 +166,12 @@ export interface ParsedSvelteFile extends BaseParsedFile {
 	exports: Omit<ExportBit, 'isDefaultExport'>[]
 }
 
+export interface ParsedExample {
+	content: string
+	name?: string
+	title?: string
+}
+
 /**
  * A human readable interface for a tsdoc comment.
  */
@@ -172,14 +183,18 @@ export interface TSDocComment extends Modifiers {
 	defaultValue?: string
 	returns?: string
 	notes?: string[]
-	examples?: {
-		name?: string
-		content: string
-	}[]
+	examples?: ParsedExample[]
 	seeBlocks?: string[]
 	customBlocks?: { tagName: string; content: string }[]
-	/** The raw tsdoc comment. */
+	/**
+	 * The raw tsdoc comment.
+	 * todo - make optional?
+	 */
 	raw: string
+	/**
+	 * Any link tags in the tsdoc comment.
+	 */
+	links?: { text: string; target: string }[]
 	// todo - decorator
 	// todo - eventProperty
 	// todo - deprecated

@@ -23,9 +23,9 @@ export function parseTSFile({
 
 			const tsdoc_node_parent = declaration.getFirstChildIfKind(ts.SyntaxKind.JSDoc)
 				? //? Check whether the declaration has a comment
-					declaration
+				  declaration
 				: //? Find the comment by traversing up the parent, this should be safe here
-					declaration
+				  declaration
 						.getAncestors()
 						.find((ancestor) => !!ancestor.getFirstChildIfKind(ts.SyntaxKind.JSDoc))
 

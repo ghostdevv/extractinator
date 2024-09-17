@@ -51,21 +51,34 @@ function extractSvelteTypeNodes(file: SourceFile, tsdoc: TSDocParser) {
 	//? Find the props, events, slots objects
 	const defs = file
 		//? Find the __propDef variable declaration
-		.getVariableDeclaration('__propDef')!
+		?.getVariableDeclaration('__propDef')
 		//? Drill down in the ast to the props, events, slots nodes
-		.getFirstChildByKind(ts.SyntaxKind.TypeLiteral)!
-		.getFirstChildByKind(ts.SyntaxKind.SyntaxList)!
-		.getChildren()
+		?.getFirstChildByKind(ts.SyntaxKind.TypeLiteral)
+		?.getFirstChildByKind(ts.SyntaxKind.SyntaxList)
+		?.getChildren()
 
 	//? Find a specific def
 	function findDef(name: string) {
 		const found = defs
 			//? Find the def key in the __propDef
-			.find((child) => child.getSymbol()?.getName() === name)!
+			?.find((child) => child.getSymbol()?.getName() === name)
 			//? Drill down in the ast to the actual def
-			.getFirstChildByKind(ts.SyntaxKind.TypeLiteral)
+			?.getFirstChildByKind(ts.SyntaxKind.TypeLiteral)
 			?.getChildSyntaxList()
 			?.getChildren()
+
+		//? Return null if there are no props/slots, or the nodes if there are
+		return !found || found.length == 0 ? null : found
+	}
+
+	function findProps() {
+		const found = defs
+			//? Find the def key in the __propDef
+			?.find((child) => child.getSymbol()?.getName() === 'props')
+			?.getType()
+			?.getProperties()
+			?.map((prop) => prop.getValueDeclaration())
+			?.filter((node): node is Node => typeof node != 'undefined')
 
 		//? Return null if there are no props/slots, or the nodes if there are
 		return !found || found.length == 0 ? null : found
@@ -99,9 +112,9 @@ function extractSvelteTypeNodes(file: SourceFile, tsdoc: TSDocParser) {
 		//? This handles non-empty automatically generated event types
 		const generatedEvents = defs
 			//? Find the events key in the __propDef
-			.find((child) => child.getSymbol()?.getName() === 'events')!
+			?.find((child) => child.getSymbol()?.getName() === 'events')
 			//? This is undefined if there are no events.
-			.getFirstChildByKind(ts.SyntaxKind.IntersectionType)
+			?.getFirstChildByKind(ts.SyntaxKind.IntersectionType)
 			//? Drill down in the ast to the events
 			?.getFirstChildByKind(ts.SyntaxKind.SyntaxList)
 			?.getFirstChildByKind(ts.SyntaxKind.TypeLiteral)
@@ -123,9 +136,9 @@ function extractSvelteTypeNodes(file: SourceFile, tsdoc: TSDocParser) {
 		return events
 	}
 
-	const props = findDef('props')
 	const slots = findDef('slots')
 	const events = findEvents()
+	const props = findProps()
 
 	/**
 	 * When a component has no props, it tends to

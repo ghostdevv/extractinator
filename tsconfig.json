@@ -12,7 +12,8 @@
         "noImplicitAny": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "noEmit": true
     },
     "include": ["src/**/*.ts"]
 }

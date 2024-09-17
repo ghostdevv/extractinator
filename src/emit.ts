@@ -83,6 +83,7 @@ export async function emit_dts(input_dir: string) {
 				lv(o('skipping cleanup in debug mode'))
 				return
 			}
+
 			lv(d('cleaning up dts...'))
 			await rm(TEMP_DIR, { recursive: true, force: true })
 		},

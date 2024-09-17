@@ -19,10 +19,9 @@ export async function get_temp_dir(name: string) {
 export async function clean_temp() {
 	const TEMP_ROOT = resolve('.extractinator')
 
-	lv(d('cleaning up dts...'))
-
 	//? Remove the .extractinator dir if it's empty.
 	if ((await readdir(TEMP_ROOT)).length == 0) {
+		lv(d('cleaning up dts...'))
 		await rm(TEMP_ROOT, { recursive: true, force: true })
 	}
 }

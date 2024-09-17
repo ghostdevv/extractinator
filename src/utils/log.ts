@@ -1,25 +1,28 @@
+/*
+ * Color logging functions with ridiculously short names that nobody should ever use.
+ * I just like them.
+ */
+
+import type { ParsedSvelteFile, ParsedTSFile } from '../types'
 import { DocExcerpt, type DocNode } from '@microsoft/tsdoc'
-import { ParsedSvelteFile, ParsedTSFile } from '../types'
-import { DEBUG_MODE } from './env'
 import c from 'chalk'
 
-let _silence = true
-let _verbose = DEBUG_MODE
+let _verbose = false
+let _quiet = false
 
-export function shouldLog(state: boolean) {
-	_silence = state
+export function setLogLevel(level: 'quiet' | 'info' | 'verbose') {
+	_verbose = level === 'verbose'
+	_quiet = level === 'quiet'
 }
-
-export function verbose() {
-	_verbose = true
-}
-
-// Ridiculously short color logging functions that
-// nobody should ever use. I just like them sometimes.
 
 /** console.log */
 export function l(...args: unknown[]) {
-	!_silence && console.log(...args)
+	!_quiet && console.log(...args)
+}
+
+/** console.warn */
+export function warn(...args: unknown[]) {
+	!_quiet && console.warn(...args)
 }
 
 /** {@link l log} verbose - only logs when {@link _verbose} is `true` */
@@ -95,7 +98,7 @@ export function n(
 	 */
 	count = 1,
 ) {
-	if (!_silence) {
+	if (!_quiet) {
 		for (let i = 0; i < count; i++) console.log()
 	}
 }
@@ -146,9 +149,6 @@ export function logSvelteFile(file: ParsedSvelteFile) {
 		if (count) {
 			lv(d(branch_char, g(count), plural))
 		}
-		// else {
-		// 	lv(d(` ⏐`))
-		// }
 	}
 }
 
@@ -169,3 +169,5 @@ export function logTsFile(file: ParsedTSFile) {
 		lv(d(g(branch_char), name))
 	}
 }
+
+export const SEP = '\x1b[90m│\x1b[39m '

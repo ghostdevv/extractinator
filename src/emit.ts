@@ -1,5 +1,5 @@
+import { b, d, l, lv, r, o, y, SEP } from './utils/log'
 import { rm, copyFile, mkdir } from 'node:fs/promises'
-import { b, d, l, lv, r, o, y } from './utils/log'
 import { relative, dirname } from 'node:path'
 import { createRequire } from 'node:module'
 import { get_temp_dir } from './utils/temp'
@@ -19,7 +19,7 @@ export async function emit_dts(input_dir: string) {
 	//? Generate a unique TEMP_DIR for this instance of extractinator.
 	const TEMP_DIR = await get_temp_dir(`dts-${Date.now()}`)
 
-	lv(d(`Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))
+	lv(d(SEP + `Writing ${b('dts')} files to "${b(TEMP_DIR)}"\n`))
 
 	//? Use svelte2tsx to generate the dts files for Svelte/TS/JS.
 	await emitDts({

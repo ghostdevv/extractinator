@@ -1,0 +1,10 @@
+{
+  "type": "svelte",
+  "fileName": "Skeleton.svelte",
+  "filePath": "tests/test-files/Skeleton.svelte",
+  "componentName": "Skeleton",
+  "props": [],
+  "events": [],
+  "slots": [],
+  "exports": []
+}

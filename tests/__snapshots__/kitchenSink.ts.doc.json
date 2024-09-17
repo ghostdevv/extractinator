@@ -1,0 +1,99 @@
+{
+  "type": "ts",
+  "fileName": "kitchenSink.ts",
+  "filePath": "tests/test-files/kitchenSink.ts",
+  "exports": [
+    {
+      "name": "findRaxacoricofallapatorius",
+      "type": "typeof findRaxacoricofallapatorius",
+      "isDefaultExport": false,
+      "comment": {
+        "raw": "/**\n * Function to locate Raxacoricofallapatorius.\n *\n * @param universeId - The Id for the Universe this planet belongs to.\n *\n * @returns The {@link Planet} Raxacoricofallapatorius.\n */",
+        "links": [
+          {
+            "target": "Planet",
+            "text": "Planet"
+          }
+        ],
+        "summary": "Function to locate Raxacoricofallapatorius.",
+        "params": [
+          {
+            "name": "universeId",
+            "description": "The Id for the Universe this planet belongs to."
+          }
+        ],
+        "returns": "The{@linkPlanet}Raxacoricofallapatorius."
+      }
+    },
+    {
+      "name": "Planet",
+      "type": "Planet",
+      "isDefaultExport": false,
+      "comment": {
+        "raw": "/**\n * Represents a planet\n */",
+        "summary": "Represents a planet"
+      }
+    },
+    {
+      "name": "default",
+      "type": "\"T.A.R.D.I.S.\"",
+      "isDefaultExport": true,
+      "comment": {
+        "raw": "/**\n * Do I need to say more?\n *\n * @deprecated\n */",
+        "summary": "Do I need to say more?"
+      }
+    },
+    {
+      "name": "a",
+      "type": "10",
+      "isDefaultExport": false,
+      "comment": {
+        "raw": "/**\n * A number called a\n *\n * @internal\n */",
+        "summary": "A number called a",
+        "internal": true
+      }
+    },
+    {
+      "name": "c",
+      "type": "20",
+      "isDefaultExport": false,
+      "comment": {
+        "raw": "/**\n * A number called b  @customTag\n */",
+        "summary": "A number called b\n@customTag"
+      }
+    },
+    {
+      "name": "b",
+      "type": "20",
+      "isDefaultExport": false,
+      "comment": {
+        "raw": "/**\n * A number called b  @customTag\n */",
+        "summary": "A number called b\n@customTag"
+      }
+    },
+    {
+      "name": "Universe",
+      "type": "Universe",
+      "isDefaultExport": false,
+      "comment": {
+        "raw": "/**\n * The universe\n *\n * @remarks\n *\n * The universe is not to be confused with the multiverse.\n *\n * @example\n *\n * Infinite Void\n * ```ts\n * const universe = new Universe()\n * ```\n *\n * @example\n *\n * Big Bang\n * ```ts\n * const universe = new Universe([\n *   {\n * \t    name: 'Earth',\n * \t\tuniverseId: '42',\n * \t\tlocation: [0, 0, 0],\n * \t\tdelta: 0,\n * \t },\n *   // ...\n *  ])\n *\n * universe.explode()\n * ```\n *\n * @see\n *\n * https://en.wikipedia.org/wiki/Universe\n *\n * @beta\n */",
+        "summary": "The universe",
+        "remarks": "The universe is not to be confused with the multiverse.",
+        "seeBlocks": [
+          "https://en.wikipedia.org/wiki/Universe"
+        ],
+        "beta": true,
+        "examples": [
+          {
+            "name": "Infinite Void",
+            "content": "\n```ts\nconst universe = new Universe()\n```"
+          },
+          {
+            "name": "Big Bang",
+            "content": "\n```ts\nconst universe = new Universe([\n {\n\t  name: 'Earth',\n\t\tuniverseId: '42',\n\t\tlocation: [0, 0, 0],\n\t\tdelta: 0,\n\t },\n // ...\n])\n\nuniverse.explode()\n```"
+          }
+        ]
+      }
+    }
+  ]
+}

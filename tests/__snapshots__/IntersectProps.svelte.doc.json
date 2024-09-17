@@ -1,0 +1,37 @@
+{
+  "type": "svelte",
+  "fileName": "IntersectProps.svelte",
+  "filePath": "tests/test-files/IntersectProps.svelte",
+  "componentName": "IntersectProps",
+  "props": [
+    {
+      "name": "foo",
+      "type": "string"
+    },
+    {
+      "name": "bar",
+      "type": "boolean"
+    },
+    {
+      "name": "baz",
+      "type": "\"ok buddy\""
+    }
+  ],
+  "events": [],
+  "slots": [
+    {
+      "name": "default",
+      "props": [
+        {
+          "name": "a",
+          "type": "() => void"
+        }
+      ]
+    },
+    {
+      "name": "test",
+      "props": []
+    }
+  ],
+  "exports": []
+}

@@ -1,0 +1,19 @@
+{
+  "type": "svelte",
+  "fileName": "Events.svelte",
+  "filePath": "tests/test-files/Events.svelte",
+  "componentName": "Events",
+  "props": [],
+  "events": [
+    {
+      "comment": {
+        "raw": "/**\n * Emitted when a click happens\n */",
+        "summary": "Emitted when a click happens"
+      },
+      "name": "click",
+      "type": "MouseEvent"
+    }
+  ],
+  "slots": [],
+  "exports": []
+}

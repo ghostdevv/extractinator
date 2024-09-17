@@ -11,7 +11,6 @@
         "extractinator": "DEBUG=1 vite-node src/exports/cli.ts --",
         "extractinator:watch": "DEBUG=1 vite-node --watch src/exports/cli.ts --",
         "playground": "pnpm run extractinator extract playground playground/out",
-        "playground2": "pnpm run extractinator:watch extract playground2/in playground2/out --log-level=verbose",
         "build": "tsup-node && publint",
         "build:watch": "tsup-node --watch",
         "test": "vitest"
@@ -36,7 +35,8 @@
         "publint": "^0.2.7",
         "tsup": "^8.0.1",
         "vite": "^5.0.10",
-        "vite-node": "^1.1.0"
+        "vite-node": "^1.1.0",
+        "vitest": "^2.1.1"
     },
     "homepage": "https://github.com/ghostdevv/extractinator",
     "repository": {

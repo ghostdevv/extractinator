@@ -1,0 +1,10 @@
+{
+  "type": "svelte",
+  "fileName": "Script.svelte",
+  "filePath": "tests/test-files/Script.svelte",
+  "componentName": "Script",
+  "props": [],
+  "events": [],
+  "slots": [],
+  "exports": []
+}

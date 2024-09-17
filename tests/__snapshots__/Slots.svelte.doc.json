@@ -1,0 +1,36 @@
+{
+  "type": "svelte",
+  "fileName": "Slots.svelte",
+  "filePath": "tests/test-files/Slots.svelte",
+  "componentName": "Slots",
+  "props": [],
+  "events": [],
+  "slots": [
+    {
+      "comment": {
+        "raw": "/**\n * Default slot\n */",
+        "summary": "Default slot"
+      },
+      "name": "default",
+      "props": [
+        {
+          "comment": {
+            "raw": "/**\n * Call this function for disappointment\n */",
+            "summary": "Call this function for disappointment"
+          },
+          "name": "a",
+          "type": "() => void"
+        }
+      ]
+    },
+    {
+      "comment": {
+        "raw": "/**\n * The slot where you stuff to test goes\n */",
+        "summary": "The slot where you stuff to test goes"
+      },
+      "name": "test",
+      "props": []
+    }
+  ],
+  "exports": []
+}

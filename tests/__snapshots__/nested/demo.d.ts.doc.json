@@ -1,0 +1,12 @@
+{
+  "type": "ts",
+  "fileName": "demo.d.ts",
+  "filePath": "tests/test-files/nested/demo.d.ts",
+  "exports": [
+    {
+      "name": "whoami",
+      "type": "\"SOME_DTS_FILE\"",
+      "isDefaultExport": false
+    }
+  ]
+}

@@ -1,5 +1,23 @@
 # extractinator
 
+## 0.5.0
+
+### Minor Changes
+
+-   feat: add log level cli flag ([`4d11fed2424609a70d24bcf8490ceb04107b87e2`](https://github.com/ghostdevv/extractinator/commit/4d11fed2424609a70d24bcf8490ceb04107b87e2))
+
+-   wip: improved jsdoc parsing ([`94a7d87e80d4eac4a62b18781b9c0044d5fb1461`](https://github.com/ghostdevv/extractinator/commit/94a7d87e80d4eac4a62b18781b9c0044d5fb1461))
+
+-   feat: handle multiple declarations by outputting twice ([`072f83fdd34f39410fafd2831e4fe37f5d993e98`](https://github.com/ghostdevv/extractinator/commit/072f83fdd34f39410fafd2831e4fe37f5d993e98))
+
+### Patch Changes
+
+-   fix: exit if a file is passed, or the path doesn't exist ([`79311f02739edde08ccfe143a0baddd3ad970dcd`](https://github.com/ghostdevv/extractinator/commit/79311f02739edde08ccfe143a0baddd3ad970dcd))
+
+-   fix: only log cleaning up in temp if actaully cleaning up ([`d5fd3dcaf2430170a92f12db47faebcf614f1dde`](https://github.com/ghostdevv/extractinator/commit/d5fd3dcaf2430170a92f12db47faebcf614f1dde))
+
+-   fix: extract props if $Props is used ([`d3403cea3ea53ac32187feadbb3878cfc3609a87`](https://github.com/ghostdevv/extractinator/commit/d3403cea3ea53ac32187feadbb3878cfc3609a87))
+
 ## 0.4.0
 
 ### Minor Changes
